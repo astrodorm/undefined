@@ -1,4 +1,5 @@
 const db = require('../models');
+const { Emessage } = require('../utils/err');
 
 exports.createMerchants = async (req, res) => {
   try {
@@ -23,8 +24,7 @@ exports.createMerchants = async (req, res) => {
     const merchant = await db.Merchant.create(req.body);
     res.status(200).json({ status: 200, data: merchant });
   } catch (e) {
-    console.log(e);
-    return res.status(400).json({ status: 400, message: e.message });
+    Emessage(e, res);
   }
 };
 
@@ -59,18 +59,39 @@ exports.fetchMerchantsByLocation = async (req, res) => {
     );
     res.status(200).json({ status: 200, data: merchants });
   } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
+    Emessage(e, res);
   }
 };
 
 exports.searchMerchantByName = async (req, res) => {
   try {
     let q = req.query.q;
+
     const merchants = await db.Merchant.find({
       name: { $regex: new RegExp(q), $options: 'i' }
-    });
+    }).select('name location.address city state');
+
     res.status(200).json({ status: 200, data: merchants });
   } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
+    Emessage(e, res);
+  }
+};
+
+exports.deleteMerchant = async (req, res) => {
+  try {
+    let _id = req.params.id;
+    const merchant = await db.Merchant.deleteOne({ _id });
+
+    if (merchant.ok && merchant.n)
+      return res
+        .status(200)
+        .json({ status: 200, data: `Merchant successfully deleted` });
+
+    return res.status(400).json({
+      status: 400,
+      message: `Merchant was not successfully deleted.`
+    });
+  } catch (e) {
+    Emessage(e, res);
   }
 };
