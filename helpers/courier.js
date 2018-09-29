@@ -42,3 +42,19 @@ exports.editCourier = async (req, res) => {
     Emessage(e, res);
   }
 };
+
+exports.deleteCourier = async (req, res) => {
+  try {
+    const courier = await db.Courier.deleteOne({ _id: req.params.id });
+    if (courier.ok && courier.n)
+      return res
+        .status(200)
+        .json({ status: 200, data: `Courier successfully deleted` });
+
+    return res
+      .status(400)
+      .json({ status: 400, message: `Couldn't delete courier` });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
