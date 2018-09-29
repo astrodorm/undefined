@@ -9,7 +9,8 @@ exports.createStaff = async (req, res) => {
     for (let input of inputs) {
       if (!req.body[input]) err.push(`${input} is required`);
     }
-    if (err.length >= 1) return res.status(400).json({ status: 400, err });
+    if (err.length >= 1)
+      return res.status(400).json({ status: 400, message: err });
 
     if (!isEmail(req.body.email))
       return res

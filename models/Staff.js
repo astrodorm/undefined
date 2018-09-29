@@ -41,4 +41,9 @@ staffSchema.methods.comparePassword = async function(password) {
   return await bcrypt.compare(password, this.oauth);
 };
 
+staffSchema.methods.toJSON = function() {
+  const { oauth, ...rest } = this.toObject();
+  return { ...rest };
+};
+
 module.exports = mongoose.model('Staff', staffSchema);
