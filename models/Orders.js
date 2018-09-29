@@ -8,7 +8,7 @@ const orderSchema = new mongoose.Schema(
       ref: 'Product'
     },
     quantity: Number,
-    shopperReferenceNo: Number,
+    shopperReferenceNumber: Number,
     customerID: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Customer'
@@ -17,7 +17,7 @@ const orderSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
-    driverRefNo: Number,
+    driverReferenceNumber: Number,
     feedbackID: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Feedback'

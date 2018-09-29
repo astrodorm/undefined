@@ -12,7 +12,7 @@ const driverSchema = new mongoose.Schema(
       trim: true
     },
     phoneNumber: Number,
-    referenceNo: Number
+    referenceNumber: Number
   },
   { timestamps: true }
 );

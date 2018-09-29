@@ -17,7 +17,7 @@ const cardSchema = new mongoose.Schema(
     bank: String,
     bin: String,
     cardType: String,
-    countryCode: Number
+    countryCode: String
   },
   { timestamps: true }
 );
