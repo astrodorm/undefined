@@ -4,9 +4,11 @@ mongoose.Promise = global.Promise;
 const options = {
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 500,
-  keepAlive: true
+  keepAlive: true,
+  useNewUrlParser: true
 };
 
+mongoose.set('useCreateIndex', true);
 mongoose.connect(
   process.env.MONGODB_URI,
   options
