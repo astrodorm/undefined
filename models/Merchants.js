@@ -37,6 +37,7 @@ const merchantSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+merchantSchema.index({ name: 'text' });
 merchantSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('Merchant', merchantSchema);
