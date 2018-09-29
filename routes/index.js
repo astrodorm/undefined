@@ -18,4 +18,6 @@ router
 router.route('/merchants/near').get(merchant.fetchMerchantsByLocation);
 router.route('/merchants/search').get(merchant.searchMerchantByName);
 
+router.route('/merchants/:id').delete(auth, merchant.deleteMerchant);
+
 module.exports = router;
