@@ -23,3 +23,4 @@ module.exports.Order = require('./Orders');
 module.exports.FeedBack = require('./Feedback');
 module.exports.Courier = require('./Courier');
 module.exports.Card = require('./Card');
+module.exports.ShoppingList = require('./ShoppingList');
