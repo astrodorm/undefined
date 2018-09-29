@@ -62,3 +62,15 @@ exports.fetchMerchantsByLocation = async (req, res) => {
     return res.status(400).json({ status: 400, message: e.message });
   }
 };
+
+exports.searchMerchantByName = async (req, res) => {
+  try {
+    let q = req.query.q;
+    const merchants = await db.Merchant.find({
+      name: { $regex: new RegExp(q), $options: 'i' }
+    });
+    res.status(200).json({ status: 200, data: merchants });
+  } catch (e) {
+    return res.status(400).json({ status: 400, message: e.message });
+  }
+};
