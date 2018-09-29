@@ -27,3 +27,12 @@ exports.createMerchants = async (req, res) => {
     return res.status(400).json({ status: 400, message: e.message });
   }
 };
+
+exports.fetchAllMerchants = async (req, res) => {
+  try {
+    const merchants = await db.Merchant.find({});
+    res.status(200).json({ status: 200, data: merchants });
+  } catch (e) {
+    return res.status(401).json({ status: 401, message: err });
+  }
+};
