@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const feedBackSchema = new mongoose.Schema({
-  rating: Number,
-  message: String,
-  driverID: {
-    type: mongoose.SchemaTypes.ObjectId,
-    ref: 'Driver'
-  }
-});
+const feedBackSchema = new mongoose.Schema(
+  {
+    rating: Number,
+    message: String,
+    driverID: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Driver'
+    }
+  },
+  { timestamps: true }
+);
 
 module.exports = mongoose.model('FeedBack', feedBackSchema);

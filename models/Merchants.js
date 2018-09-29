@@ -1,38 +1,41 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const merchantSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-    required: `Merchant name is required`
-  },
-  location: {
-    type: {
+const merchantSchema = new mongoose.Schema(
+  {
+    name: {
       type: String,
-      default: 'Point'
+      trim: true,
+      required: `Merchant name is required`
     },
-    coordinates: [
-      {
-        type: Number,
-        required: `You must enter coordinates`
+    location: {
+      type: {
+        type: String,
+        default: 'Point'
+      },
+      coordinates: [
+        {
+          type: Number,
+          required: `You must enter coordinates`
+        }
+      ],
+      address: {
+        type: String,
+        required: `You must provide an address`
       }
-    ],
-    address: {
+    },
+    city: {
       type: String,
-      required: `You must provide an address`
+      trim: true
+    },
+    state: {
+      type: String,
+      trim: true
     }
   },
-  city: {                                                   
-    type: String,
-    trim: true
-  },
-  state: {
-    type: String,
-    trim: true
-  }
-});
+  { timestamps: true }
+);
 
 merchantSchema.index({ location: '2dsphere' });
 
-module.exports = mongoose.model('Merchant', merchantSchema)
+module.exports = mongoose.model('Merchant', merchantSchema);
