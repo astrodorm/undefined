@@ -58,3 +58,12 @@ exports.deleteCourier = async (req, res) => {
     Emessage(e, res);
   }
 };
+
+exports.FetchACourier = async (req, res) => {
+  try {
+    const courier = await db.Courier.findOne({ _id: req.params.id });
+    res.status(200).json({ status: 200, data: courier });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};

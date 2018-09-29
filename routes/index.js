@@ -32,6 +32,7 @@ router
 router
   .route('/couriers/:id')
   .put(auth, courier.editCourier)
-  .delete(auth, courier.deleteCourier);
+  .delete(auth, courier.deleteCourier)
+  .get(auth, courier.FetchACourier);
 
 module.exports = router;
