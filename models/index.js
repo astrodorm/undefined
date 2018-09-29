@@ -16,3 +16,4 @@ mongoose.connection.on('error', err => {
 });
 
 module.exports.Merchant = require('./Merchants');
+module.exports.Customer = require('./Customers');
