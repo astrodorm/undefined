@@ -15,6 +15,7 @@ router
   .post(auth, merchant.createMerchants)
   .get(auth, merchant.fetchAllMerchants);
 
-router.route('/merchants/near').post(merchant.fetchMerchantsByLocation);
+router.route('/merchants/near').get(merchant.fetchMerchantsByLocation);
+router.route('/merchants/search').get(merchant.searchMerchantByName);
 
 module.exports = router;
