@@ -29,3 +29,16 @@ exports.fetchCouriers = async (req, res) => {
     Emessage(e, res);
   }
 };
+
+exports.editCourier = async (req, res) => {
+  try {
+    const courier = await db.Courier.findOneAndUpdate(
+      { _id: req.params.id },
+      req.body,
+      { new: true }
+    );
+    res.status(200).json({ status: 200, data: courier });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};

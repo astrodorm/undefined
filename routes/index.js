@@ -29,4 +29,6 @@ router
   .post(auth, courier.createCourier)
   .get(auth, courier.fetchCouriers);
 
+router.route('/couriers/:id').put(auth, courier.editCourier);
+
 module.exports = router;
