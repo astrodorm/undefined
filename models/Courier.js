@@ -12,7 +12,8 @@ const courierSchema = new mongoose.Schema(
       type: String,
       required: `Company's address is required`,
       trim: true
-    }
+    },
+    createdBy: String
   },
   { timestamps: true }
 );

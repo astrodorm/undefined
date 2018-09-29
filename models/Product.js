@@ -19,7 +19,8 @@ const productSchema = new mongoose.Schema(
     isPickupAvailable: {
       type: Boolean,
       default: true
-    }
+    },
+    createdBy: String
   },
   { timestamps: true }
 );

@@ -22,7 +22,8 @@ const shopperSchema = new mongoose.Schema(
     referenceNumber: {
       type: Number,
       trim: true
-    }
+    },
+    createdBy: String
   },
   { timestamps: true }
 );

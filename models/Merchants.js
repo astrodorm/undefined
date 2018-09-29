@@ -31,7 +31,8 @@ const merchantSchema = new mongoose.Schema(
     state: {
       type: String,
       trim: true
-    }
+    },
+    createdBy: String
   },
   { timestamps: true }
 );
