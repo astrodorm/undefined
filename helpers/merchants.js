@@ -95,3 +95,16 @@ exports.deleteMerchant = async (req, res) => {
     Emessage(e, res);
   }
 };
+
+exports.editMerchant = async (req, res) => {
+  try {
+    let _id = req.params.id;
+
+    const merchant = await db.Merchant.findOneAndUpdate({ _id }, req.body, {
+      new: true
+    });
+    return res.status(200).json({ status: 200, data: merchant });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
