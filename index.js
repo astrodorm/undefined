@@ -18,8 +18,8 @@ app.use((req, res, next) => {
   next(err);
 });
 
-app.use((err, res, req, next) => {
-  return res.status(err.status || 500).res.json(err.message);
+app.use((err, req, res, next) => {
+  return res.status(err.status || 500).json(err.message);
 });
 
 const port = process.env.PORT || 8080;
