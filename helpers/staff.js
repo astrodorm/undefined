@@ -18,7 +18,10 @@ exports.createStaff = async (req, res) => {
         .json({ status: 400, message: `Please enter an email address` });
 
     const staff = await db.Staff.create(req.body);
-    res.status(200).json({ status: 200, data: staff });
+    const token = await jwt.sign({ _id: staff._id }, process.env.SECRET, {
+      expiresIn: '8760h'
+    });
+    res.status(200).json({ status: 200, data: { staff, token } });
   } catch (e) {
     return res.status(400).json({ status: 400, message: e.message });
   }
@@ -49,7 +52,7 @@ exports.staffLogin = async (req, res) => {
 
 exports.getStaff = async (req, res) => {
   try {
-    return res.status(200).json({ status: 200, data: req.admin });
+    return res.status(200).json({ status: 200, data: { staff: req.admin } });
   } catch (e) {
     return res.status(400).json({ status: 400, message: e.message });
   }
