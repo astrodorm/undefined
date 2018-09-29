@@ -37,4 +37,8 @@ staffSchema.pre('save', async function(next) {
   }
 });
 
+staffSchema.methods.comparePassword = async function(password) {
+  return await bcrypt.compare(password, this.oauth);
+};
+
 module.exports = mongoose.model('Staff', staffSchema);
