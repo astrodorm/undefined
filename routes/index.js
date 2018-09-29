@@ -24,6 +24,9 @@ router
   .delete(auth, merchant.deleteMerchant)
   .put(auth, merchant.editMerchant);
 
-router.route('/couriers').post(auth, courier.createCourier);
+router
+  .route('/couriers')
+  .post(auth, courier.createCourier)
+  .get(auth, courier.fetchCouriers);
 
 module.exports = router;

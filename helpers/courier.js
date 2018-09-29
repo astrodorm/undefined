@@ -18,3 +18,14 @@ exports.createCourier = async (req, res) => {
     Emessage(e, res);
   }
 };
+
+exports.fetchCouriers = async (req, res) => {
+  try {
+    const couriers = await db.Courier.find({}).select(
+      'companyName companyAddress createdBy'
+    );
+    res.status(200).json({ status: 200, data: couriers });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
