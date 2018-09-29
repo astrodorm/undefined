@@ -3,6 +3,7 @@ const router = express.Router();
 const staff = require('../helpers/staff');
 const { auth } = require('../middleware/auth');
 const merchant = require('../helpers/merchants');
+const courier = require('../helpers/courier');
 
 router
   .route('/staff')
@@ -22,5 +23,7 @@ router
   .route('/merchants/:id')
   .delete(auth, merchant.deleteMerchant)
   .put(auth, merchant.editMerchant);
+
+router.route('/couriers').post(auth, courier.createCourier);
 
 module.exports = router;
