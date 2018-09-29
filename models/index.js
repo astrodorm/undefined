@@ -24,3 +24,4 @@ module.exports.FeedBack = require('./Feedback');
 module.exports.Courier = require('./Courier');
 module.exports.Card = require('./Card');
 module.exports.ShoppingList = require('./ShoppingList');
+module.exports.Driver = require('./Driver');
