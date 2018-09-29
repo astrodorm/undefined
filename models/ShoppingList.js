@@ -9,7 +9,7 @@ const shoppingListSchema = new mongoose.Schema(
     },
     list: [
       {
-        type: mongoose.SchemaType.ObjectId,
+        type: mongoose.SchemaTypes.ObjectId,
         ref: 'Product'
       }
     ]
