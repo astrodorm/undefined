@@ -20,3 +20,4 @@ module.exports.Customer = require('./Customers');
 module.exports.Shoppers = require('./Shoppers');
 module.exports.Product = require('./Product');
 module.exports.Order = require('./Orders');
+module.exports.FeedBack = require('./Feedback');
