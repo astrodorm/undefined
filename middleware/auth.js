@@ -20,3 +20,19 @@ exports.auth = async (req, res, next) => {
     return res.status(401).json({ status: 401, message: e.message });
   }
 };
+
+exports.customerAuth = async (req, res, next) => {
+  try {
+    if (!req.headers.authorization)
+      return res
+        .status(401)
+        .json({ status: 401, message: `Unauthorized access` });
+    let access = req.headers.authorization.split(' ')[1];
+    let customerVerification = await jwt.verify(access, process.env.SECRET);
+    let customer = await db.Customer.findOne({ _id: customerVerification._id });
+    req.customer = customer;
+    next();
+  } catch (e) {
+    return res.status(401).json({ status: 401, message: e.message });
+  }
+};
