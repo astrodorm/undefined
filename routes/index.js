@@ -5,6 +5,7 @@ const { auth, customerAuth } = require('../middleware/auth');
 const merchant = require('../helpers/merchants');
 const courier = require('../helpers/courier');
 const customer = require('../helpers/customer');
+const drivers = require('../helpers/driver');
 
 router
   .route('/staff')
@@ -46,5 +47,16 @@ router.route('/customers/login').post(customer.customerLogin);
 router
   .route('/customers/admin')
   .get(auth, customer.getAllCustomersForAdminUsage);
+
+router
+  .route('/drivers')
+  .post(auth, drivers.createdriver)
+  .get(auth, drivers.fetchdrivers);
+
+router
+  .route('/drivers/:id')
+  .put(auth, drivers.editdriver)
+  .get(auth, drivers.fetchAdriver)
+  .delete(auth, drivers.deletedriver);
 
 module.exports = router;
