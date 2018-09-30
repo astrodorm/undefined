@@ -5,7 +5,9 @@ exports.createdriver = async (req, res) => {
   try {
     let inputs = ['firstname', 'lastname', 'phoneNumber', 'referenceNumber'];
 
-    Validator(inputs, req, res);
+    let errMessages = Validator(inputs, req);
+    if (errMessages.length >= 1)
+      return res.status(400).json({ status: 400, message: errMessages });
 
     if (
       isNaN(Number(req.body.phoneNumber)) ||
@@ -19,6 +21,7 @@ exports.createdriver = async (req, res) => {
     const driver = await db.Driver.create(req.body);
     res.status(200).json({ status: 200, data: driver });
   } catch (e) {
+    console.log(e);
     Emessage(e, res);
   }
 };

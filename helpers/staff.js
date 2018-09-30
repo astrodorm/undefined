@@ -7,7 +7,9 @@ exports.createStaff = async (req, res) => {
   try {
     let inputs = ['name', 'email', 'oauth'];
 
-    Validator(inputs, req, res);
+    let errMessages = Validator(inputs, req);
+    if (errMessages.length >= 1)
+      return res.status(400).json({ status: 400, message: errMessages });
 
     if (!isEmail(req.body.email))
       return res

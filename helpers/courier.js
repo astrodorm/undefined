@@ -5,7 +5,9 @@ exports.createCourier = async (req, res) => {
   try {
     let inputs = ['companyName', 'companyAddress'];
 
-    Validator(inputs, req, res);
+    let errMessages = Validator(inputs, req);
+    if (errMessages.length >= 1)
+      return res.status(400).json({ status: 400, message: errMessages });
 
     req.body.createdBy = req.admin.email;
     const courier = await db.Courier.create(req.body);

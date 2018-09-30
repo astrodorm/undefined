@@ -11,7 +11,9 @@ exports.createMerchants = async (req, res) => {
       'city'
     ];
 
-    Validator(inputs, req, res);
+    let errMessages = Validator(inputs, req);
+    if (errMessages.length >= 1)
+      return res.status(400).json({ status: 400, message: errMessages });
 
     // longitude or lng is location.coordinates.0
     // latitude or lat is location.coordinates.1
