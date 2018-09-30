@@ -8,6 +8,7 @@ const options = {
   useNewUrlParser: true
 };
 
+mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.connect(
   process.env.MONGODB_URI,
