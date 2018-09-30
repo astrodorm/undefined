@@ -1,5 +1,5 @@
 const db = require('../models');
-const { Emessage } = require('../utils/err');
+const { Emessage, Validator } = require('../utils/err');
 
 exports.createMerchants = async (req, res) => {
   try {
@@ -10,13 +10,8 @@ exports.createMerchants = async (req, res) => {
       'location.coordinates.1',
       'city'
     ];
-    let err = [];
-    for (let input of inputs) {
-      console.log(req.body[input]);
-      if (!req.body[input]) err.push(`${input} required`);
-    }
-    if (err.length >= 1)
-      return res.status(401).json({ status: 401, message: err });
+
+    Validator(inputs, req, res);
 
     // longitude or lng is location.coordinates.0
     // latitude or lat is location.coordinates.1

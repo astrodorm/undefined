@@ -1,17 +1,13 @@
 const jwt = require('jsonwebtoken');
 const isEmail = require('validator/lib/isEmail');
 const db = require('../models');
-const { Emessage } = require('../utils/err');
+const { Emessage, Validator } = require('../utils/err');
 
 exports.createCustomer = async (req, res) => {
   try {
     let inputs = ['firstname', 'lastname', 'email', 'oauth'];
-    let err = [];
-    for (let input of inputs) {
-      if (!req.body[input]) err.push(`${input} is required`);
-    }
-    if (err.length >= 1)
-      return res.status(400).json({ status: 400, message: err });
+
+    Validator(inputs, req, res);
 
     if (req.body.phoneNumber && isNaN(Number(req.body.phoneNumber)))
       return res

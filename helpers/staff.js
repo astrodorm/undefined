@@ -1,16 +1,13 @@
 const jwt = require('jsonwebtoken');
 const isEmail = require('validator/lib/isEmail');
 const db = require('../models');
+const { Emessage, Validator } = require('../utils/err');
 
 exports.createStaff = async (req, res) => {
   try {
     let inputs = ['name', 'email', 'oauth'];
-    let err = [];
-    for (let input of inputs) {
-      if (!req.body[input]) err.push(`${input} is required`);
-    }
-    if (err.length >= 1)
-      return res.status(400).json({ status: 400, message: err });
+
+    Validator(inputs, req, res);
 
     if (!isEmail(req.body.email))
       return res
@@ -29,7 +26,7 @@ exports.createStaff = async (req, res) => {
     });
     res.status(200).json({ status: 200, data: { staff, token } });
   } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
+    Emessage(e, res);
   }
 };
 
@@ -52,7 +49,7 @@ exports.staffLogin = async (req, res) => {
     });
     res.status(200).json({ status: 200, data: { staff, token } });
   } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
+    Emessage(e, res);
   }
 };
 
@@ -60,6 +57,6 @@ exports.getStaff = async (req, res) => {
   try {
     return res.status(200).json({ status: 200, data: { staff: req.admin } });
   } catch (e) {
-    return res.status(400).json({ status: 400, message: e.message });
+    Emessage(e, res);
   }
 };
