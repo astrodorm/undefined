@@ -3,12 +3,14 @@ require('dotenv').config({ path: 'variables.env' });
 const app = express();
 const cors = require('cors');
 const helmet = require('helmet');
+const fileUpload = require('express-fileupload');
 const routes = require('./routes');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(helmet());
+app.use(fileUpload());
 
 app.use('/api', routes);
 
