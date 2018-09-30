@@ -76,3 +76,56 @@ exports.fetchAllProducts = async (req, res) => {
     Emessage(e, res);
   }
 };
+
+exports.fetchProductsWherePickupIs = async (req, res) => {
+  try {
+    const pickupProducts = await db.Product.find({
+      isPickupAvailable: true
+    }).populate('merchantID', 'name city state location.address');
+
+    res.status(200).json({ status: 200, data: pickupProducts });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.removeProduct = async (req, res) => {
+  try {
+    const product = await db.Product.deleteOne({ _id: req.params.id });
+    if (product.ok && product.n)
+      return res
+        .status(200)
+        .json({ status: 200, data: `product successfully deleted` });
+
+    return res
+      .status(400)
+      .json({ status: 400, message: `Couldn't delete product` });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.fetchAProduct = async (req, res) => {
+  try {
+    const product = await db.Product.findOne({ _id: req.params.id });
+    res.status(200).json({ status: 200, data: product });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.searchForProduct = async (req, res) => {
+  try {
+    const q = req.query.q;
+    const products = await db.Product.find({
+      productName: {
+        $regex: new RegExp(q),
+        $options: 'i'
+      }
+    }).populate('merchantID', 'name city state location.address');
+
+    res.status(200).json({ status: 200, data: products });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
