@@ -17,6 +17,12 @@ exports.createStaff = async (req, res) => {
         .status(400)
         .json({ status: 400, message: `Please enter an email address` });
 
+    const exists = await db.Staff.findOne({ email: req.body.email });
+    if (exists)
+      return res
+        .status(400)
+        .json({ status: 400, message: `Staff with this email already exist` });
+
     const staff = await db.Staff.create(req.body);
     const token = await jwt.sign({ _id: staff._id }, process.env.SECRET, {
       expiresIn: '8760h'
