@@ -6,10 +6,9 @@ const { Emessage, Validator } = require('../utils/err');
 
 exports.uploadProductImage = async (req, res, next) => {
   try {
-    if (!req.files)
-      return res
-        .status(400)
-        .json({ status: 400, message: `Product image upload expected` });
+    if (!req.files) {
+      return next();
+    }
 
     const mimetype = req.files.thumbnail.mimetype;
     const extension = `${mimetype.split('/')[1]}`;
@@ -40,8 +39,38 @@ exports.createProduct = async (req, res) => {
     if (errMessages.length >= 1)
       return res.status(400).json({ status: 400, message: errMessages });
 
+    if (isNaN(Number(req.body.price)))
+      return res
+        .status(400)
+        .json({ status: 400, message: `Expecting price in figures` });
+
     req.body.createdBy = req.admin.email;
     const products = await db.Product.create(req.body);
+    res.status(200).json({ status: 200, data: products });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.editProduct = async (req, res) => {
+  try {
+    let _id = req.params.id;
+    const product = await db.Product.findOneAndUpdate({ _id }, req.body, {
+      new: true
+    }).populate('merchantID', 'name city state location.address');
+
+    res.status(200).json({ status: 200, data: product });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.fetchAllProducts = async (req, res) => {
+  try {
+    const products = await db.Product.find({}).populate(
+      'merchantID',
+      'name city state location.address'
+    );
     res.status(200).json({ status: 200, data: products });
   } catch (e) {
     Emessage(e, res);

@@ -62,5 +62,10 @@ router
 
 router
   .route('/products')
-  .post(auth, product.uploadProductImage, product.createProduct);
+  .post(auth, product.uploadProductImage, product.createProduct)
+  .get(product.fetchAllProducts);
+
+router
+  .route('/products/:id')
+  .put(auth, product.uploadProductImage, product.editProduct);
 module.exports = router;
