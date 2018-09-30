@@ -6,6 +6,7 @@ const merchant = require('../helpers/merchants');
 const courier = require('../helpers/courier');
 const customer = require('../helpers/customer');
 const drivers = require('../helpers/driver');
+const product = require('../helpers/product');
 
 router
   .route('/staff')
@@ -59,4 +60,7 @@ router
   .get(auth, drivers.fetchAdriver)
   .delete(auth, drivers.deletedriver);
 
+router
+  .route('/products')
+  .post(auth, product.uploadProductImage, product.createProduct);
 module.exports = router;
