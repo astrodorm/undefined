@@ -51,8 +51,13 @@ customerSchema.pre('save', async function(next) {
   }
 });
 
-customerSchema.methods = async function comparePassword(password) {
+customerSchema.methods.comparePassword = async function(password) {
   return await bcrypt.compare(password, this.oauth);
+};
+
+customerSchema.methods.toJSON = function() {
+  const { oauth, ...rest } = this.toObject();
+  return { ...rest };
 };
 
 module.exports = mongoose.model('Customer', customerSchema);
