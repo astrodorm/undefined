@@ -65,7 +65,12 @@ router
   .post(auth, product.uploadProductImage, product.createProduct)
   .get(product.fetchAllProducts);
 
+router.route('/products/pickup').get(product.fetchProductsWherePickupIs);
+router.route('/products/search').get(product.searchForProduct);
+
 router
   .route('/products/:id')
-  .put(auth, product.uploadProductImage, product.editProduct);
+  .put(auth, product.uploadProductImage, product.editProduct)
+  .delete(auth, product.removeProduct)
+  .get(product.fetchAProduct);
 module.exports = router;
