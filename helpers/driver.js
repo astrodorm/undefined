@@ -3,6 +3,15 @@ const { Emessage, Validator } = require('../utils/err');
 
 exports.createdriver = async (req, res) => {
   try {
+    const refNo = await db.Driver.findOne({
+      referenceNumber: req.body.referenceNumber
+    });
+    if (refNo)
+      return res.status(400).json({
+        status: 400,
+        message: `Shopper with this reference number already exist`
+      });
+
     let inputs = ['firstname', 'lastname', 'phoneNumber', 'referenceNumber'];
 
     let errMessages = Validator(inputs, req);
