@@ -50,7 +50,9 @@ exports.fetchCustomerCart = async (req, res) => {
     if (!cart) {
       cart = await db.ShoppingList.create({ customerID });
     }
-    return res.status(200).json({ status: 200, data: cart });
+    let quantity = cart.list.length;
+
+    return res.status(200).json({ status: 200, data: cart, quantity });
   } catch (e) {
     Emessage(e, req);
   }
