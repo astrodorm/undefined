@@ -25,7 +25,11 @@ const shopperSchema = new mongoose.Schema(
       required: `Reference Number is required`,
       unique: true
     },
-    createdBy: String
+    createdBy: String,
+    numberOfruns: {
+      type: Number,
+      default: 0
+    }
   },
   { timestamps: true }
 );
