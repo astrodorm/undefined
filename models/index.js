@@ -8,6 +8,10 @@ const options = {
   useNewUrlParser: true
 };
 
+if (process.env.NODE_ENV !== 'production') {
+  mongoose.set('debug', true);
+}
+
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.connect(
