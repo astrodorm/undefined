@@ -89,5 +89,6 @@ router
 
 router.route('/carts/add').post(customerAuth, shoppingList.addToCart);
 router.route('/carts/remove').post(customerAuth, shoppingList.removeFromCart);
+router.route('/carts').get(customerAuth, shoppingList.fetchCustomerCart);
 
 module.exports = router;
