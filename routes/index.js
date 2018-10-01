@@ -9,6 +9,7 @@ const drivers = require('../helpers/driver');
 const product = require('../helpers/product');
 const shopper = require('../helpers/shoppers');
 const shoppingList = require('../helpers/shoppingList');
+const order = require('../helpers/order');
 
 router
   .route('/staff')
@@ -90,5 +91,7 @@ router
 router.route('/carts/add').post(customerAuth, shoppingList.addToCart);
 router.route('/carts/remove').post(customerAuth, shoppingList.removeFromCart);
 router.route('/carts').get(customerAuth, shoppingList.fetchCustomerCart);
+
+router.route('/orders/create').get(customerAuth, order.createCustomerOrder);
 
 module.exports = router;
