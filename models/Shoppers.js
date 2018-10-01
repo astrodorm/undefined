@@ -21,7 +21,9 @@ const shopperSchema = new mongoose.Schema(
     },
     referenceNumber: {
       type: Number,
-      trim: true
+      trim: true,
+      required: `Reference Number is required`,
+      unique: true
     },
     createdBy: String
   },

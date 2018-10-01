@@ -12,7 +12,11 @@ const driverSchema = new mongoose.Schema(
       trim: true
     },
     phoneNumber: Number,
-    referenceNumber: Number,
+    referenceNumber: {
+      type: Number,
+      unique: true,
+      required: 'Reference Number is required'
+    },
     createdBy: String
   },
   { timestamps: true }
