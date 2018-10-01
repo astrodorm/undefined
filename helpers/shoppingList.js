@@ -18,7 +18,7 @@ exports.addToCart = async (req, res) => {
         },
         { $addToSet: { list: req.body.productID } },
         { new: true }
-      ).populate('list', 'productName price thumbnail');
+      );
       return res.status(200).json({ status: 200, data: shoppingCart });
     }
     return res.status(200).json({ status: 200, data: customerCart });
@@ -38,6 +38,19 @@ exports.removeFromCart = async (req, res) => {
     ).populate('list', 'productName price thumbnail');
 
     res.status(200).json({ status: 200, data: shoppingCart });
+  } catch (e) {
+    Emessage(e, req);
+  }
+};
+
+exports.fetchCustomerCart = async (req, res) => {
+  try {
+    let customerID = req.customer._id;
+    let cart = await db.ShoppingList.findOne({ customerID });
+    if (!cart) {
+      cart = await db.ShoppingList.create({ customerID });
+    }
+    return res.status(200).json({ status: 200, data: cart });
   } catch (e) {
     Emessage(e, req);
   }
