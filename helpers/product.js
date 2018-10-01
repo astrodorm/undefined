@@ -57,7 +57,7 @@ exports.editProduct = async (req, res) => {
     let _id = req.params.id;
     const product = await db.Product.findOneAndUpdate({ _id }, req.body, {
       new: true
-    }).populate('merchantID', 'name city state location.address');
+    });
 
     res.status(200).json({ status: 200, data: product });
   } catch (e) {
@@ -67,10 +67,7 @@ exports.editProduct = async (req, res) => {
 
 exports.fetchAllProducts = async (req, res) => {
   try {
-    const products = await db.Product.find({}).populate(
-      'merchantID',
-      'name city state location.address'
-    );
+    const products = await db.Product.find({});
     res.status(200).json({ status: 200, data: products });
   } catch (e) {
     Emessage(e, res);
@@ -81,7 +78,7 @@ exports.fetchProductsWherePickupIs = async (req, res) => {
   try {
     const pickupProducts = await db.Product.find({
       isPickupAvailable: true
-    }).populate('merchantID', 'name city state location.address');
+    });
 
     res.status(200).json({ status: 200, data: pickupProducts });
   } catch (e) {
@@ -107,7 +104,9 @@ exports.removeProduct = async (req, res) => {
 
 exports.fetchAProduct = async (req, res) => {
   try {
-    const product = await db.Product.findOne({ _id: req.params.id });
+    const product = await db.Product.findOne({
+      _id: req.params.id
+    }).populate('merchantID', 'name city state location.address');
     res.status(200).json({ status: 200, data: product });
   } catch (e) {
     Emessage(e, res);
@@ -122,7 +121,7 @@ exports.searchForProduct = async (req, res) => {
         $regex: new RegExp(q),
         $options: 'i'
       }
-    }).populate('merchantID', 'name city state location.address');
+    });
 
     res.status(200).json({ status: 200, data: products });
   } catch (e) {
