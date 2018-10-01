@@ -18,4 +18,12 @@ const shoppingListSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+function autopopulate(next) {
+  this.populate('list', 'productName price thumbnail');
+  next();
+}
+
+shoppingListSchema.pre('findOneAndUpdate', autopopulate);
+shoppingListSchema.pre('findOne', autopopulate);
+
 module.exports = mongoose.model('ShoppingList', shoppingListSchema);

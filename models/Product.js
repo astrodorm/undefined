@@ -27,4 +27,12 @@ const productSchema = new mongoose.Schema(
 
 productSchema.index({ productName: 'text' });
 
+function autoPopulate(next) {
+  this.populate('merchantID', 'name city state location.address');
+  next();
+}
+
+productSchema.pre('findOneAndUpdate', autoPopulate);
+productSchema.pre('find', autoPopulate);
+
 module.exports = mongoose.model('Product', productSchema);
