@@ -3,10 +3,12 @@ mongoose.Promise = global.Promise;
 
 const orderSchema = new mongoose.Schema(
   {
-    productID: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Product'
-    },
+    productID: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Product'
+      }
+    ],
     quantity: Number,
     shopperReferenceNumber: Number,
     customerID: {
@@ -25,5 +27,12 @@ const orderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+function autopopulate(next) {
+  this.populate('productID', 'productName price thumbnail');
+  next();
+}
+
+orderSchema.pre('findOneAndUpdate', autopopulate);
 
 module.exports = mongoose.model('Order', orderSchema);
