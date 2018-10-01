@@ -5,7 +5,8 @@ const shoppingListSchema = new mongoose.Schema(
   {
     customerID: {
       type: mongoose.SchemaTypes.ObjectId,
-      ref: 'Customer'
+      ref: 'Customer',
+      index: true
     },
     list: [
       {
