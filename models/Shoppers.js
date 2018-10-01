@@ -3,7 +3,7 @@ mongoose.Promise = global.Promise;
 
 const shopperSchema = new mongoose.Schema(
   {
-    fistname: {
+    firstname: {
       type: String,
       trim: true
     },

@@ -80,5 +80,10 @@ router
   .post(auth, shopper.createshopper)
   .get(auth, shopper.fetchshoppers);
 
-  
+router
+  .route('/shoppers/:id')
+  .get(auth, shopper.fetchAshopper)
+  .put(auth, shopper.editshopper)
+  .delete(auth, shopper.deleteshopper);
+
 module.exports = router;
