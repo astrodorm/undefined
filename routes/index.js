@@ -8,6 +8,7 @@ const customer = require('../helpers/customer');
 const drivers = require('../helpers/driver');
 const product = require('../helpers/product');
 const shopper = require('../helpers/shoppers');
+const shoppingList = require('../helpers/shoppingList');
 
 router
   .route('/staff')
@@ -85,5 +86,8 @@ router
   .get(auth, shopper.fetchAshopper)
   .put(auth, shopper.editshopper)
   .delete(auth, shopper.deleteshopper);
+
+router.route('/carts/add').post(customerAuth, shoppingList.addToCart);
+router.route('/carts/remove').post(customerAuth, shoppingList.removeFromCart);
 
 module.exports = router;
