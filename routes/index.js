@@ -10,6 +10,7 @@ const product = require('../helpers/product');
 const shopper = require('../helpers/shoppers');
 const shoppingList = require('../helpers/shoppingList');
 const order = require('../helpers/order');
+const feedback = require('../helpers/feedback');
 
 router
   .route('/staff')
@@ -99,5 +100,7 @@ router
   .route('/orders/:id')
   .get(auth, order.getOneOrder)
   .put(auth, order.updateOrder);
+
+router.route('/feedbacks').post(customerAuth, feedback.giveFeedback);
 
 module.exports = router;
