@@ -10,6 +10,7 @@ const options = {
 
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
+// mongoose.set('debug', true);
 mongoose.connect(
   process.env.MONGODB_URI,
   options
