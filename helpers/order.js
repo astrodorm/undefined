@@ -14,16 +14,28 @@ exports.createCustomerOrder = async (req, res) => {
     if (!order) {
       order = await db.Order.create({ customerID });
     }
+    const shopper = await db.Shopper.find({})
+      .sort({ numberOfShoppings: 1 })
+      .limit(5);
+
     const checkout = await db.Order.findOneAndUpdate(
       {
         _id: order._id,
         customerID
       },
       {
-        $set: { quantity },
+        $set: {
+          quantity,
+          status: 'PENDING',
+          shopperReferenceNumber: shopper[0].referenceNumber
+        },
         $addToSet: { productID: { $each: shoppingList.list } }
       },
       { new: true }
+    );
+    await db.Shopper.updateOne(
+      { _id: shopper[0]._id },
+      { numberOfShoppings: ++shopper[0].numberOfShoppings }
     );
     res.status(200).json({ status: 200, data: checkout });
   } catch (e) {
@@ -31,6 +43,4 @@ exports.createCustomerOrder = async (req, res) => {
   }
 };
 
-exports.handleOrder = async (req, res) => {
-  
-}
+exports.handleOrder = async (req, res) => {};
