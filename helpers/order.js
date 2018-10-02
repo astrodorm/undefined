@@ -90,8 +90,13 @@ exports.getOneOrder = async (req, res) => {
 
 exports.updateOrder = async (req, res) => {
   try {
-    let status = req.body.status;
-    let driverReferenceNumber = req.body.driverReferenceNumber;
+    // to allow for only status and driverReferenceNumber update
+    
+    let initial = await db.Order.findOne({ _id: req.params.id });
+    let status = req.body.status ? req.body.status : initial.status;
+    let driverReferenceNumber = req.body.driverReferenceNumber
+      ? req.body.driverReferenceNumber
+      : initial.driverReferenceNumber;
 
     const order = await db.Order.findOneAndUpdate(
       { _id: req.params.id },
