@@ -34,5 +34,7 @@ function autopopulate(next) {
 }
 
 orderSchema.pre('findOneAndUpdate', autopopulate);
+orderSchema.pre('find', autopopulate);
+orderSchema.pre('findOne', autopopulate);
 
 module.exports = mongoose.model('Order', orderSchema);
