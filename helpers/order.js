@@ -52,7 +52,7 @@ exports.updateOrderStatus = async (req, res) => {
         status: 400,
         message: `Please enter shopper's reference Number`
       });
-    let status = req.body.status.toUpperCase();
+    let status = req.body.status;
     const order = await db.Order.findOneAndUpdate(
       { shopperReferenceNumber, status: { $ne: 'DELIVERED' } },
       { status },
@@ -64,6 +64,43 @@ exports.updateOrderStatus = async (req, res) => {
         message: `Please check shopper's reference number or the Order has been delivered`
       });
 
+    res.status(200).json({ status: 200, data: order });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.getAllOrders = async (req, res) => {
+  try {
+    const orders = await db.Order.find({});
+    res.status(200).json({ status: 200, data: orders });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.getOneOrder = async (req, res) => {
+  try {
+    const order = await db.Order.findOne({ _id: req.params.id });
+    res.status(200).json({ status: 200, data: order });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.updateOrder = async (req, res) => {
+  try {
+    let status = req.body.status;
+    let driverReferenceNumber = req.body.driverReferenceNumber;
+
+    const order = await db.Order.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        status,
+        driverReferenceNumber
+      },
+      { new: true }
+    );
     res.status(200).json({ status: 200, data: order });
   } catch (e) {
     Emessage(e, res);
