@@ -93,5 +93,6 @@ router.route('/carts/remove').post(customerAuth, shoppingList.removeFromCart);
 router.route('/carts').get(customerAuth, shoppingList.fetchCustomerCart);
 
 router.route('/orders/create').get(customerAuth, order.createCustomerOrder);
+router.route('/orders/status').put(auth, order.updateOrderStatus);
 
 module.exports = router;
