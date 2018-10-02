@@ -19,7 +19,7 @@ const orderSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
-    driverReferenceNumber: Number,
+    driverReferenceNumber: { type: Number, index: true },
     feedbackID: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Feedback'
