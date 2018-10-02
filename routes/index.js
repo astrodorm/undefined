@@ -94,5 +94,10 @@ router.route('/carts').get(customerAuth, shoppingList.fetchCustomerCart);
 
 router.route('/orders/create').get(customerAuth, order.createCustomerOrder);
 router.route('/orders/status').put(auth, order.updateOrderStatus);
+router.route('/orders/all').get(auth, order.getAllOrders);
+router
+  .route('/orders/:id')
+  .get(auth, order.getOneOrder)
+  .put(auth, order.updateOrder);
 
 module.exports = router;
