@@ -43,4 +43,29 @@ exports.createCustomerOrder = async (req, res) => {
   }
 };
 
-exports.handleOrder = async (req, res) => {};
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    // search order with shopperReferenceNumber where status is not DELIVERED and update status,
+    let shopperReferenceNumber = req.body.shopperReferenceNumber;
+    if (!shopperReferenceNumber)
+      return res.status(400).json({
+        status: 400,
+        message: `Please enter shopper's reference Number`
+      });
+    let status = req.body.status.toUpperCase();
+    const order = await db.Order.findOneAndUpdate(
+      { shopperReferenceNumber, status: { $ne: 'DELIVERED' } },
+      { status },
+      { new: true }
+    );
+    if (!order)
+      return res.status(400).json({
+        status: 400,
+        message: `Please check shopper's reference number or the Order has been delivered`
+      });
+
+    res.status(200).json({ status: 200, data: order });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
