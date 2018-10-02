@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema(
       }
     ],
     quantity: Number,
-    shopperReferenceNumber: Number,
+    shopperReferenceNumber: { type: Number, index: true },
     customerID: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Customer'
