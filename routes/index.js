@@ -11,12 +11,14 @@ const shopper = require('../helpers/shoppers');
 const shoppingList = require('../helpers/shoppingList');
 const order = require('../helpers/order');
 const feedback = require('../helpers/feedback');
+const card = require('../helpers/card');
 
 router
   .route('/staff')
   .post(staff.createStaff)
   .get(auth, staff.getStaff);
 router.route('/staff/login').post(staff.staffLogin);
+router.route('/staff/all').get(auth, staff.fetchAllStaffs);
 
 router
   .route('/merchants')
@@ -102,5 +104,11 @@ router
   .put(auth, order.updateOrder);
 
 router.route('/feedbacks').post(customerAuth, feedback.giveFeedback);
+
+router.route('/cards/charge').post(customerAuth, card.chargeCard);
+router.route('/cards/charge/pin').post(customerAuth, card.addPin);
+router.route('/cards/charge/otp').post(customerAuth, card.addOtp);
+router.route('/cards/charge/phone').post(customerAuth, card.addPhone);
+router.route('/cards/charge/:reference').get(customerAuth, card.getPending);
 
 module.exports = router;
