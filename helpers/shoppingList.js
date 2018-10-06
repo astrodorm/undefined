@@ -1,5 +1,6 @@
 const db = require('../models');
 const { Emessage } = require('../utils/err');
+const { calculateTotalPrice } = require('../utils/totalCost');
 
 exports.addToCart = async (req, res) => {
   try {
@@ -19,11 +20,14 @@ exports.addToCart = async (req, res) => {
         { $addToSet: { list: req.body.productID } },
         { new: true }
       );
-      return res.status(200).json({ status: 200, data: shoppingCart });
+      let totalCost = calculateTotalPrice(shoppingCart.list);
+      return res
+        .status(200)
+        .json({ status: 200, data: shoppingCart, totalCost });
     }
     return res.status(200).json({ status: 200, data: customerCart });
   } catch (e) {
-    Emessage(e, req);
+    Emessage(e, res);
   }
 };
 
@@ -37,9 +41,11 @@ exports.removeFromCart = async (req, res) => {
       { new: true }
     ).populate('list', 'productName price thumbnail');
 
-    res.status(200).json({ status: 200, data: shoppingCart });
+    let totalCost = calculateTotalPrice(shoppingCart.list);
+
+    res.status(200).json({ status: 200, data: shoppingCart, totalCost });
   } catch (e) {
-    Emessage(e, req);
+    Emessage(e, res);
   }
 };
 
@@ -52,8 +58,12 @@ exports.fetchCustomerCart = async (req, res) => {
     }
     let quantity = cart.list.length;
 
-    return res.status(200).json({ status: 200, data: cart, quantity });
+    let totalCost = calculateTotalPrice(cart.list);
+
+    return res
+      .status(200)
+      .json({ status: 200, data: cart, quantity, totalCost });
   } catch (e) {
-    Emessage(e, req);
+    Emessage(e, res);
   }
 };

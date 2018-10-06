@@ -1,5 +1,6 @@
 const db = require('../models');
 const { Emessage } = require('../utils/err');
+const { calculateTotalPrice } = require('../utils/totalCost');
 
 exports.createCustomerOrder = async (req, res) => {
   try {
@@ -33,11 +34,12 @@ exports.createCustomerOrder = async (req, res) => {
       },
       { new: true }
     );
+    let totalCost = calculateTotalPrice(checkout.productID);
     await db.Shopper.updateOne(
       { _id: shopper[0]._id },
       { numberOfShoppings: ++shopper[0].numberOfShoppings }
     );
-    res.status(200).json({ status: 200, data: checkout });
+    res.status(200).json({ status: 200, data: checkout, totalCost });
   } catch (e) {
     Emessage(e, res);
   }
@@ -91,7 +93,7 @@ exports.getOneOrder = async (req, res) => {
 exports.updateOrder = async (req, res) => {
   try {
     // to allow for only status and driverReferenceNumber update
-    
+
     let initial = await db.Order.findOne({ _id: req.params.id });
     let status = req.body.status ? req.body.status : initial.status;
     let driverReferenceNumber = req.body.driverReferenceNumber
