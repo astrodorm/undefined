@@ -28,6 +28,8 @@
     "jimp": "^0.5.3",
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.18",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5",
     "uuid": "^3.3.2",
     "validator": "^10.8.0"
   },
