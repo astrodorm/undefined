@@ -62,3 +62,12 @@ exports.getStaff = async (req, res) => {
     Emessage(e, res);
   }
 };
+
+exports.fetchAllStaffs = async (req, res) => {
+  try {
+    const staffs = await db.Staff.find({});
+    res.status(200).json({ status: 200, data: staffs });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
