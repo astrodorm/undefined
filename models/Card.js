@@ -15,7 +15,7 @@ const cardSchema = new mongoose.Schema(
     expiryMonth: Number,
     expiryYear: Number,
     bank: String,
-    bin: String,
+    reference: String,
     cardType: String,
     countryCode: String
   },
