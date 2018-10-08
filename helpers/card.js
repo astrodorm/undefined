@@ -2,9 +2,16 @@ const rp = require('request-promise-native');
 const db = require('../models');
 const { Emessage, Validator } = require('../utils/err');
 const paystackURI = 'https://api.paystack.co';
+const { success } = require('../utils/cardUtils');
 
 exports.chargeCard = async (req, res) => {
   try {
+    let inputs = ['amount', 'number', 'cvv', 'expiry_month', 'expiry_year'];
+
+    let errMessages = Validator(inputs, req);
+    if (errMessages.length >= 1)
+      return res.status(400).json({ status: 400, message: errMessages });
+
     const body = {
       email: req.customer.email,
       amount: req.body.amount,
@@ -24,22 +31,11 @@ exports.chargeCard = async (req, res) => {
     };
     const response = await rp(options);
 
-    if (response.status && response.data.status === 'success') {
-      let card = await db.Card.create({
-        customerID: req.customer._id,
-        last4Digits: response.data.authorization.last4,
-        expiryMonth: response.data.authorization.exp_month,
-        expiryYear: response.data.authorization.exp_year,
-        bank: response.data.authorization.bank,
-        reference: response.data.reference,
-        cardType: response.data.authorization.card_type,
-        countryCode: response.data.authorization.country_code,
-        token: response.data.authorization.authorization_code
-      });
+    let card = await success(response, db, req);
+    if (card)
       return res
         .status(200)
         .json({ status: 200, data: { message: `payment successful`, card } });
-    }
 
     if (response.status && response.data.status === 'send_pin')
       return res.status(200).json({ status: 201, data: response.data });
@@ -75,22 +71,12 @@ exports.addPin = async (req, res) => {
     };
     const response = await rp(options);
 
-    if (response.status && response.data.status === 'success') {
-      let card = await db.Card.create({
-        customerID: req.customer._id,
-        last4Digits: response.data.authorization.last4,
-        expiryMonth: response.data.authorization.exp_month,
-        expiryYear: response.data.authorization.exp_year,
-        bank: response.data.authorization.bank,
-        reference: response.data.reference,
-        cardType: response.data.authorization.card_type,
-        countryCode: response.data.authorization.country_code,
-        token: response.data.authorization.authorization_code
+    let card = await success(response, db, req);
+    if (card)
+      return res.status(200).json({
+        status: 200,
+        data: { message: `payment successful`, card }
       });
-      return res
-        .status(200)
-        .json({ status: 200, data: { message: `payment successful`, card } });
-    }
 
     if (response.status && response.data.status === 'send_otp')
       return res.status(200).json({ status: 202, data: response.data });
@@ -123,22 +109,12 @@ exports.addOtp = async (req, res) => {
     };
 
     const response = await rp(options);
-    if (response.status && response.data.status === 'success') {
-      let card = await db.Card.create({
-        customerID: req.customer._id,
-        last4Digits: response.data.authorization.last4,
-        expiryMonth: response.data.authorization.exp_month,
-        expiryYear: response.data.authorization.exp_year,
-        bank: response.data.authorization.bank,
-        reference: response.data.reference,
-        cardType: response.data.authorization.card_type,
-        countryCode: response.data.authorization.country_code,
-        token: response.data.authorization.authorization_code
+    let card = await success(response, db, req);
+    if (card)
+      return res.status(200).json({
+        status: 200,
+        data: { message: `payment successful`, card }
       });
-      return res
-        .status(200)
-        .json({ status: 200, data: { message: `payment successful`, card } });
-    }
 
     if (response.status && response.data.status === 'send_pin')
       return res.status(200).json({ status: 201, data: response.data });
@@ -171,29 +147,19 @@ exports.addPhone = async (req, res) => {
     };
 
     const response = await rp(options);
-    if (response.status && response.data.status === 'success') {
-      let card = await db.Card.create({
-        customerID: req.customer._id,
-        last4Digits: response.data.authorization.last4,
-        expiryMonth: response.data.authorization.exp_month,
-        expiryYear: response.data.authorization.exp_year,
-        bank: response.data.authorization.bank,
-        reference: response.data.reference,
-        cardType: response.data.authorization.card_type,
-        countryCode: response.data.authorization.country_code,
-        token: response.data.authorization.authorization_code
+    let card = await success(response, db, req);
+    if (card)
+      return res.status(200).json({
+        status: 200,
+        data: { message: `payment successful`, card }
       });
-      return res
-        .status(200)
-        .json({ status: 200, data: { message: `payment successful`, card } });
-    }
 
     if (response.status && response.data.status === 'send_pin')
       return res.status(200).json({ status: 201, data: response.data });
 
     if (response.status && response.data.status === 'send_otp')
       return res.status(200).json({ status: 202, data: response.data });
-      
+
     if (response.status && response.data.status === 'open_url')
       return res.status(200).json({ status: 204, data: response.data });
 
@@ -213,22 +179,12 @@ exports.getPending = async (req, res) => {
       headers: { Authorization: `Bearer ${process.env.PAYSTACK_TEST_SECRET}` }
     };
     const response = await rp(options);
-    if (response.status && response.data.status === 'success') {
-      let card = await db.Card.create({
-        customerID: req.customer._id,
-        last4Digits: response.data.authorization.last4,
-        expiryMonth: response.data.authorization.exp_month,
-        expiryYear: response.data.authorization.exp_year,
-        bank: response.data.authorization.bank,
-        reference: response.data.reference,
-        cardType: response.data.authorization.card_type,
-        countryCode: response.data.authorization.country_code,
-        token: response.data.authorization.authorization_code
+    let card = await success(response, db, req);
+    if (card)
+      return res.status(200).json({
+        status: 200,
+        data: { message: `payment successful`, card }
       });
-      return res
-        .status(200)
-        .json({ status: 200, data: { message: `payment successful`, card } });
-    }
     return res.status(200).json(response);
   } catch (e) {
     if (e.error) return res.status(e.statusCode).json(e.error);
