@@ -14,6 +14,14 @@ exports.giveFeedback = async (req, res) => {
       referenceNumber: order.driverReferenceNumber
     });
 
+    if (!driver)
+      return res
+        .status(400)
+        .json({
+          status: 400,
+          message: `I guess no driver delivered your orders`
+        });
+
     const feedBack = await db.FeedBack.create({
       rating: req.body.rating,
       message: req.body.message,
