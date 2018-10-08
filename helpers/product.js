@@ -33,7 +33,13 @@ exports.uploadProductImage = async (req, res, next) => {
 
 exports.createProduct = async (req, res) => {
   try {
-    let inputs = ['productName', 'price', 'merchantID'];
+    let inputs = [
+      'productName',
+      'price',
+      'merchantID',
+      'isPickupAvailable',
+      'categoryID'
+    ];
 
     let errMessages = Validator(inputs, req);
     if (errMessages.length >= 1)
@@ -76,8 +82,14 @@ exports.fetchAllProducts = async (req, res) => {
 
 exports.fetchProductsWherePickupIs = async (req, res) => {
   try {
+    const q = req.query.q;
+
     const pickupProducts = await db.Product.find({
-      isPickupAvailable: true
+      isPickupAvailable: true,
+      productName: {
+        $regex: new RegExp(q),
+        $options: 'i'
+      }
     });
 
     res.status(200).json({ status: 200, data: pickupProducts });
