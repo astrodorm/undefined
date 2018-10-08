@@ -18,7 +18,11 @@ exports.createCustomerOrder = async (req, res) => {
     const shopper = await db.Shopper.find({})
       .sort({ numberOfShoppings: 1 })
       .limit(5);
-
+    if (!shopper)
+      return res
+        .status(400)
+        .json({ status: 400, message: 'Vendee has no shoppers yet' });
+        
     const checkout = await db.Order.findOneAndUpdate(
       {
         _id: order._id,
