@@ -12,6 +12,7 @@ const shoppingList = require('../helpers/shoppingList');
 const order = require('../helpers/order');
 const feedback = require('../helpers/feedback');
 const card = require('../helpers/card');
+const category = require('../helpers/category');
 
 router
   .route('/staff')
@@ -71,7 +72,7 @@ router
   .post(auth, product.uploadProductImage, product.createProduct)
   .get(product.fetchAllProducts);
 
-router.route('/products/pickup').get(product.fetchProductsWherePickupIs);
+router.route('/products/pickup/search').get(product.fetchProductsWherePickupIs);
 router.route('/products/search').get(product.searchForProduct);
 
 router
@@ -110,5 +111,16 @@ router.route('/cards/charge/pin').post(customerAuth, card.addPin);
 router.route('/cards/charge/otp').post(customerAuth, card.addOtp);
 router.route('/cards/charge/phone').post(customerAuth, card.addPhone);
 router.route('/cards/charge/:reference').get(customerAuth, card.getPending);
+
+router
+  .route('/category')
+  .post(auth, category.createcategory)
+  .get(auth, category.fetchcategories);
+
+router
+  .route('/category/:id')
+  .get(auth, category.fetchAcategory)
+  .put(auth, category.editcategory)
+  .delete(auth, category.deletecategory);
 
 module.exports = router;
