@@ -20,7 +20,11 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: true
     },
-    createdBy: String
+    createdBy: String,
+    categoryID: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Category'
+    }
   },
   { timestamps: true }
 );
@@ -28,11 +32,15 @@ const productSchema = new mongoose.Schema(
 productSchema.index({ productName: 'text' });
 
 function autoPopulate(next) {
-  this.populate('merchantID', 'name city state location.address');
+  this.populate('merchantID', 'name city state location.address').populate(
+    'categoryID',
+    'categoryName'
+  );
   next();
 }
 
 productSchema.pre('findOneAndUpdate', autoPopulate);
 productSchema.pre('find', autoPopulate);
+productSchema.pre('findOne', autoPopulate);
 
 module.exports = mongoose.model('Product', productSchema);
