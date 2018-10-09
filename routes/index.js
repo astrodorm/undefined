@@ -104,7 +104,10 @@ router
   .get(auth, order.getOneOrder)
   .put(auth, order.updateOrder);
 
-router.route('/feedbacks').post(customerAuth, feedback.giveFeedback);
+router
+  .route('/feedbacks')
+  .post(customerAuth, feedback.giveFeedback)
+  .get(auth, feedback.fetchAllFeedbacks);
 
 router.route('/cards/charge').post(customerAuth, card.chargeCard);
 router.route('/cards/charge/pin').post(customerAuth, card.addPin);
