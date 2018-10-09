@@ -8,6 +8,10 @@ const feedBackSchema = new mongoose.Schema(
     driverID: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Driver'
+    },
+    customerID: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Customer'
     }
   },
   { timestamps: true }
