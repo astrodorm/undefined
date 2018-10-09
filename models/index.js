@@ -30,3 +30,4 @@ module.exports.Card = require('./Card');
 module.exports.ShoppingList = require('./ShoppingList');
 module.exports.Driver = require('./Driver');
 module.exports.Staff = require('./Staff');
+module.exports.Category = require('./Category');
