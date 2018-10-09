@@ -28,9 +28,22 @@ exports.giveFeedback = async (req, res) => {
     const feedBack = await db.FeedBack.create({
       rating: req.body.rating,
       message: req.body.message,
-      driverID: driver._id
+      driverID: driver._id,
+      customerID
     });
     res.status(200).json({ status: 200, data: feedBack });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.fetchAllFeedbacks = async (req, res) => {
+  try {
+    const feedBacks = await db.FeedBack.find({})
+      .populate('driverID', 'firstname lastname referenceNumber')
+      .populate('customerID', 'firstname lastname email');
+
+    res.status(200).json({ status: 200, data: feedBacks });
   } catch (e) {
     Emessage(e, res);
   }
