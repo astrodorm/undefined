@@ -3,6 +3,17 @@ const { Emessage, Validator } = require('../utils/err');
 
 exports.createshopper = async (req, res) => {
   try {
+    if (
+      isNaN(Number(req.body.phoneNumber)) ||
+      isNaN(Number(req.body.referenceNumber))
+    )
+      return res
+        .status(400)
+        .json({
+          status: 400,
+          message: `Only numeric values allowed for reference number and phone number`
+        });
+
     const refNo = await db.Shopper.findOne({
       referenceNumber: req.body.referenceNumber
     });
@@ -23,14 +34,6 @@ exports.createshopper = async (req, res) => {
     let errMessages = Validator(inputs, req);
     if (errMessages.length >= 1)
       return res.status(400).json({ status: 400, message: errMessages });
-
-    if (
-      isNaN(Number(req.body.phoneNumber)) ||
-      isNaN(Number(req.body.referenceNumber))
-    )
-      return res
-        .status(400)
-        .json({ status: 400, message: `Only numeric values allowed` });
 
     req.body.createdBy = req.admin.email;
     const shopper = await db.Shopper.create(req.body);
