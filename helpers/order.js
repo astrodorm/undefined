@@ -24,10 +24,11 @@ exports.createCustomerOrder = async (req, res) => {
       .sort({ numberOfShoppings: 1 })
       .limit(5);
 
-    if (shopper.length <= 0)
-      return res
-        .status(400)
-        .json({ status: 400, message: `No Shopper has been created yet` });
+    if (!shopper.length)
+      return res.status(400).json({
+        status: 400,
+        message: `No Shopper to run errands has been added yet. Contact admin`
+      });
 
     const checkout = await db.Order.findOneAndUpdate(
       {
