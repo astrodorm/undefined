@@ -7,6 +7,11 @@ exports.createCustomerOrder = async (req, res) => {
     const customerID = req.customer._id;
 
     let shoppingList = await db.ShoppingList.findOne({ customerID });
+    if (!shoppingList)
+      return res.status(400).json({
+        status: 400,
+        message: `Customer does not yet have a shopping list`
+      });
     let quantity = shoppingList.list.length;
 
     // why find order and create if there's none is so that we only have one
@@ -18,11 +23,12 @@ exports.createCustomerOrder = async (req, res) => {
     const shopper = await db.Shopper.find({})
       .sort({ numberOfShoppings: 1 })
       .limit(5);
-    if (!shopper)
+
+    if (shopper.length <= 0)
       return res
         .status(400)
-        .json({ status: 400, message: 'Vendee has no shoppers yet' });
-        
+        .json({ status: 400, message: `No Shopper has been created yet` });
+
     const checkout = await db.Order.findOneAndUpdate(
       {
         _id: order._id,
