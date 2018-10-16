@@ -14,7 +14,9 @@ app.use(fileUpload());
 
 app.use('/api', routes);
 
-app.use(express.static('public'))
+let filepath = path.join(__dirname, '..', 'public/upload');
+console.log(filepath);
+app.use('/static', express.static(filepath));
 
 app.use((req, res, next) => {
   const err = new Error('No route Found');
