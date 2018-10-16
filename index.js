@@ -1,7 +1,6 @@
 const express = require('express');
 require('dotenv').config({ path: 'variables.env' });
 const app = express();
-const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const fileUpload = require('express-fileupload');
@@ -15,9 +14,7 @@ app.use(fileUpload());
 
 app.use('/api', routes);
 
-let filepath = path.join(__dirname, '..', 'public/upload');
-console.log(filepath);
-app.use('/static', express.static(filepath));
+app.use(express.static('public'))
 
 app.use((req, res, next) => {
   const err = new Error('No route Found');
