@@ -14,6 +14,8 @@ app.use(fileUpload());
 
 app.use('/api', routes);
 
+app.use(express.static('public'))
+
 app.use((req, res, next) => {
   const err = new Error('No route Found');
   err.status = 404;
