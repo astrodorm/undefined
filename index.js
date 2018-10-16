@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config({ path: 'variables.env' });
 const app = express();
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const fileUpload = require('express-fileupload');
