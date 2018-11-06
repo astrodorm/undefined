@@ -95,17 +95,25 @@ router
   .delete(auth, shopper.deleteshopper);
 
 router.route('/carts/add').post(customerAuth, shoppingList.addToCart);
-router.route('/carts/remove').post(customerAuth, shoppingList.removeFromCart);
 router.route('/carts').get(customerAuth, shoppingList.fetchCustomerCart);
+router
+  .route('/carts/remove/:id')
+  .post(customerAuth, shoppingList.removeFromCart);
 
 router.route('/orders/create').get(customerAuth, order.createCustomerOrder);
 router.route('/orders/status').put(auth, order.updateOrderStatus);
 router.route('/orders/all').get(auth, order.getAllOrders);
 router
+  .route('/orders/customer/all')
+  .get(customerAuth, order.getAllOrdersCustomer);
+router
   .route('/orders/:id')
   .get(auth, order.getOneOrder)
   .put(auth, order.updateOrder);
 
+router
+  .route('/orders/customer/:orderID')
+  .get(customerAuth, order.getACustomerOrder);
 router
   .route('/feedbacks')
   .post(customerAuth, feedback.giveFeedback)
