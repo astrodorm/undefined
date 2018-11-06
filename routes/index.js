@@ -56,6 +56,8 @@ router
   .route('/customers/admin')
   .get(auth, customer.getAllCustomersForAdminUsage);
 
+router.route('/customers/edit').put(customerAuth, customer.editCustomer);
+
 router
   .route('/drivers')
   .post(auth, drivers.createdriver)

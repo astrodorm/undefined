@@ -78,3 +78,17 @@ exports.getAllCustomersForAdminUsage = async (req, res) => {
     Emessage(e, res);
   }
 };
+
+exports.editCustomer = async (req, res) => {
+  try {
+    const customer = await db.Customer.findOneAndUpdate(
+      { _id: req.customer._id },
+      { $set: req.body },
+      { new: true }
+    );
+
+    res.status(200).json({ status: 200, data: customer });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
