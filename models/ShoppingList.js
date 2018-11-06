@@ -3,17 +3,19 @@ mongoose.Promise = global.Promise;
 
 const shoppingListSchema = new mongoose.Schema(
   {
+    list: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'Product'
+    },
     customerID: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Customer',
       index: true
     },
-    list: [
-      {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Product'
-      }
-    ]
+    quantity: {
+      type: Number,
+      default: 1
+    }
   },
   { timestamps: true }
 );
@@ -23,7 +25,7 @@ function autopopulate(next) {
   next();
 }
 
-shoppingListSchema.pre('findOneAndUpdate', autopopulate);
 shoppingListSchema.pre('findOne', autopopulate);
+shoppingListSchema.pre('find', autopopulate);
 
 module.exports = mongoose.model('ShoppingList', shoppingListSchema);
