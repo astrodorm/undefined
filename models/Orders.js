@@ -6,10 +6,9 @@ const orderSchema = new mongoose.Schema(
     productID: [
       {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: 'Product'
+        ref: 'OrderHistory'
       }
     ],
-    quantity: Number,
     shopperReferenceNumber: { type: Number, index: true },
     customerID: {
       type: mongoose.SchemaTypes.ObjectId,
@@ -23,13 +22,14 @@ const orderSchema = new mongoose.Schema(
     feedbackID: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Feedback'
-    }
+    },
+    totalCost: Number
   },
   { timestamps: true }
 );
 
 function autopopulate(next) {
-  this.populate('productID', 'productName price thumbnail').populate(
+  this.populate('productID', 'productName price thumbnail quantity').populate(
     'customerID',
     'firstname lastname address phoneNumber email'
   );
