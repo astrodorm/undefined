@@ -6,26 +6,29 @@ exports.addToCart = async (req, res) => {
   try {
     let customerID = req.customer._id;
 
-    let customerCart = await db.ShoppingList.findOne({ customerID });
-    if (!customerCart) {
-      customerCart = await db.ShoppingList.create({ customerID });
-    }
+    let [existing] = await db.ShoppingList.find({
+      customerID,
+      list: req.body.productID
+    });
 
-    if (req.body.productID) {
-      let shoppingCart = await db.ShoppingList.findOneAndUpdate(
+    if (existing) {
+      let updatedShoppingList = await db.ShoppingList.findOneAndUpdate(
         {
-          _id: customerCart._id,
-          customerID
+          _id: existing._id
         },
-        { $addToSet: { list: req.body.productID } },
+        { quantity: existing.quantity + 1 },
         { new: true }
       );
-      let totalCost = calculateTotalPrice(shoppingCart.list);
-      return res
-        .status(200)
-        .json({ status: 200, data: shoppingCart, totalCost });
+
+      return res.status(200).json({ status: 200, data: updatedShoppingList });
     }
-    return res.status(200).json({ status: 200, data: customerCart });
+
+    let newShoppingList = await db.ShoppingList.create({
+      list: req.body.productID,
+      customerID
+    });
+
+    return res.status(200).json({ status: 200, data: newShoppingList });
   } catch (e) {
     Emessage(e, res);
   }
@@ -34,16 +37,23 @@ exports.addToCart = async (req, res) => {
 exports.removeFromCart = async (req, res) => {
   try {
     let customerID = req.customer._id;
-    let cart = await db.ShoppingList.findOne({ customerID });
-    let shoppingCart = await db.ShoppingList.findOneAndUpdate(
-      { _id: cart._id, customerID },
-      { $pull: { list: req.body.productID } },
-      { new: true }
-    ).populate('list', 'productName price thumbnail');
+    let _id = req.params.id;
+    let cart = await db.ShoppingList.findOne({ customerID, _id });
+    if (!cart)
+      return res
+        .status(400)
+        .json({ status: 400, message: `No Item found in cart` });
 
-    let totalCost = calculateTotalPrice(shoppingCart.list);
+    const item = await db.ShoppingList.deleteOne({ customerID, _id });
 
-    res.status(200).json({ status: 200, data: shoppingCart, totalCost });
+    if (item.ok && item.n)
+      return res
+        .status(200)
+        .json({ status: 200, data: `Item successfully removed from cart` });
+
+    return res
+      .status(400)
+      .json({ status: 400, message: `Item already removed from cart` });
   } catch (e) {
     Emessage(e, res);
   }
@@ -52,17 +62,8 @@ exports.removeFromCart = async (req, res) => {
 exports.fetchCustomerCart = async (req, res) => {
   try {
     let customerID = req.customer._id;
-    let cart = await db.ShoppingList.findOne({ customerID });
-    if (!cart) {
-      cart = await db.ShoppingList.create({ customerID });
-    }
-    let quantity = cart.list.length;
-
-    let totalCost = calculateTotalPrice(cart.list);
-
-    return res
-      .status(200)
-      .json({ status: 200, data: cart, quantity, totalCost });
+    let cart = await db.ShoppingList.find({ customerID });
+    return res.status(200).json({ status: 200, data: cart });
   } catch (e) {
     Emessage(e, res);
   }
