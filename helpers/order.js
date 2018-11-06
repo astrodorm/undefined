@@ -39,7 +39,8 @@ exports.createCustomerOrder = async (req, res) => {
         $set: {
           quantity,
           status: 'PENDING',
-          shopperReferenceNumber: shopper[0].referenceNumber
+          shopperReferenceNumber: shopper[0].referenceNumber,
+          driverReferenceNumber: 0
         },
         $addToSet: { productID: { $each: shoppingList.list } }
       },
