@@ -29,7 +29,10 @@ const orderSchema = new mongoose.Schema(
 );
 
 function autopopulate(next) {
-  this.populate('productID', 'productName price thumbnail');
+  this.populate('productID', 'productName price thumbnail').populate(
+    'customerID',
+    'firstname lastname address phoneNumber email'
+  );
   next();
 }
 
