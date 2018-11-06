@@ -6,20 +6,34 @@ exports.createCustomerOrder = async (req, res) => {
   try {
     const customerID = req.customer._id;
 
-    let shoppingList = await db.ShoppingList.findOne({ customerID });
-    if (!shoppingList)
+    let shoppingList = await db.ShoppingList.find({ customerID });
+    if (shoppingList.length < 1)
       return res.status(400).json({
         status: 400,
         message: `Customer does not yet have a shopping list`
       });
-    let quantity = shoppingList.list.length;
 
-    // why find order and create if there's none is so that we only have one
-    // record/document for a customer in the Order collection
-    let order = await db.Order.findOne({ customerID });
-    if (!order) {
-      order = await db.Order.create({ customerID });
-    }
+    let totalCost = shoppingList.reduce(
+      (initial, item) => initial + item.quantity * item.list.price,
+      0
+    );
+
+    const productOrdered = shoppingList.map(product => {
+      const item = {
+        productName: product.list.productName,
+        price: product.list.price,
+        thumbnail: product.list.thumbnail,
+        merchantID: product.list.merchantID,
+        quantity: product.quantity,
+        customerID
+      };
+      return item;
+    });
+
+    const orderHistory = await db.OrderHistory.insertMany(productOrdered);
+
+    const orderHistoryIDs = orderHistory.map(item => item._id);
+
     const shopper = await db.Shopper.find({})
       .sort({ numberOfShoppings: 1 })
       .limit(5);
@@ -30,28 +44,24 @@ exports.createCustomerOrder = async (req, res) => {
         message: `No Shopper to run errands has been added yet. Contact admin`
       });
 
-    const checkout = await db.Order.findOneAndUpdate(
-      {
-        _id: order._id,
-        customerID
-      },
-      {
-        $set: {
-          quantity,
-          status: 'PENDING',
-          shopperReferenceNumber: shopper[0].referenceNumber,
-          driverReferenceNumber: 0
-        },
-        $addToSet: { productID: { $each: shoppingList.list } }
-      },
-      { new: true }
-    );
-    let totalCost = calculateTotalPrice(checkout.productID);
-    await db.Shopper.updateOne(
-      { _id: shopper[0]._id },
-      { numberOfShoppings: ++shopper[0].numberOfShoppings }
-    );
-    res.status(200).json({ status: 200, data: checkout, totalCost });
+    let orders = await db.Order.create({
+      productID: orderHistoryIDs,
+      shopperReferenceNumber: shopper[0].referenceNumber,
+      status: 'PENDING',
+      driverReferenceNumber: 0,
+      totalCost,
+      customerID
+    });
+
+    let shoppingListIds = shoppingList.map(item => item._id);
+    console.log({ shoppingListIds });
+
+    let cartEmptied = await db.ShoppingList.deleteMany({
+      customerID,
+      _id: { $in: shoppingListIds }
+    });
+
+    res.status(200).json({ status: 200, data: orders });
   } catch (e) {
     Emessage(e, res);
   }
@@ -102,6 +112,19 @@ exports.getOneOrder = async (req, res) => {
   }
 };
 
+exports.getACustomerOrder = async (req, res) => {
+  try {
+    const customerID = req.customer._id;
+    const orders = await db.Order.findOne({
+      _id: req.params.orderID,
+      customerID
+    });
+    return res.status(200).json({ status: 200, data: orders });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
 exports.updateOrder = async (req, res) => {
   try {
     // to allow for only status and driverReferenceNumber update
@@ -121,6 +144,16 @@ exports.updateOrder = async (req, res) => {
       { new: true }
     );
     res.status(200).json({ status: 200, data: order });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.getAllOrdersCustomer = async (req, res) => {
+  try {
+    const customerID = req.customer._id;
+    const orders = await db.Order.find({ customerID });
+    res.status(200).json({ status: 200, data: orders });
   } catch (e) {
     Emessage(e, res);
   }
