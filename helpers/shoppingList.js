@@ -11,12 +11,17 @@ exports.addToCart = async (req, res) => {
       list: req.body.productID
     });
 
+    if (req.body.quantity && isNaN(Number(req.body.quantity)))
+      return res
+        .status(400)
+        .json({ status: 400, message: `quantity must be number` });
+
     if (existing) {
       let updatedShoppingList = await db.ShoppingList.findOneAndUpdate(
         {
           _id: existing._id
         },
-        { quantity: existing.quantity + 1 },
+        { quantity: req.body.quantity },
         { new: true }
       );
 
@@ -25,7 +30,8 @@ exports.addToCart = async (req, res) => {
 
     let newShoppingList = await db.ShoppingList.create({
       list: req.body.productID,
-      customerID
+      customerID,
+      quantity: req.body.quantity
     });
 
     return res.status(200).json({ status: 200, data: newShoppingList });
