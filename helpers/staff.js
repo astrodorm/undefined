@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const isEmail = require('validator/lib/isEmail');
+const bcrypt = require('bcrypt');
 const db = require('../models');
 const { Emessage, Validator } = require('../utils/err');
 
@@ -67,6 +68,44 @@ exports.fetchAllStaffs = async (req, res) => {
   try {
     const staffs = await db.Staff.find({});
     res.status(200).json({ status: 200, data: staffs });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.editStaff = async (req, res) => {
+  try {
+    if (req.body.oauth) {
+      req.body.oauth = await bcrypt.hash(req.body.oauth, 10);
+    }
+    const staff = await db.Staff.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      { new: true }
+    );
+    res.status(200).json({ status: 200, data: staff });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};
+
+exports.deleteStaff = async (req, res) => {
+  try {
+    console.log({ admin: req.admin._id });
+    console.log(req.params.id);
+    if (req.params.id == req.admin._id)
+      return res
+        .status(400)
+        .json({ status: 400, message: `You can't delete yourself` });
+    const deleted = await db.Staff.deleteOne({ _id: req.params.id });
+    if (deleted.ok && deleted.n)
+      return res
+        .status(200)
+        .json({ status: 200, data: `Staff successfully deleted` });
+
+    return res
+      .status(400)
+      .json({ status: 400, message: `Staff already deleted` });
   } catch (e) {
     Emessage(e, res);
   }

@@ -22,6 +22,11 @@ router.route('/staff/login').post(staff.staffLogin);
 router.route('/staff/all').get(auth, staff.fetchAllStaffs);
 
 router
+  .route('/staff/:id')
+  .put(auth, staff.editStaff)
+  .delete(auth, staff.deleteStaff);
+
+router
   .route('/merchants')
   .post(auth, merchant.createMerchants)
   .get(auth, merchant.fetchAllMerchants);
