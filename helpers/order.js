@@ -43,14 +43,15 @@ exports.createCustomerOrder = async (req, res) => {
         status: 400,
         message: `No Shopper to run errands has been added yet. Contact admin`
       });
-
+    let paymentReference = req.query.payref;
     let orders = await db.Order.create({
       productID: orderHistoryIDs,
       shopperReferenceNumber: shopper[0].referenceNumber,
       status: 'PENDING',
       driverReferenceNumber: 0,
       totalCost,
-      customerID
+      customerID,
+      paymentReference
     });
 
     let shoppingListIds = shoppingList.map(item => item._id);
