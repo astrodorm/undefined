@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const isEmail = require('validator/lib/isEmail');
 const db = require('../models');
 const { Emessage, Validator } = require('../utils/err');
@@ -81,6 +82,9 @@ exports.getAllCustomersForAdminUsage = async (req, res) => {
 
 exports.editCustomer = async (req, res) => {
   try {
+    if (req.body.oauth) {
+      req.body.oauth = await bcrypt.hash(req.body.oauth, 10);
+    }
     const customer = await db.Customer.findOneAndUpdate(
       { _id: req.customer._id },
       { $set: req.body },
