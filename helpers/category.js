@@ -62,3 +62,13 @@ exports.fetchAcategory = async (req, res) => {
     Emessage(e, res);
   }
 };
+
+exports.fetchProductsByCategory = async (req, res) => {
+  try {
+    let categoryID = req.params.categoryID;
+    const products = await db.Product.find({ categoryID });
+    res.status(200).json({ status: 200, data: products });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};

@@ -141,4 +141,7 @@ router
   .put(auth, category.editcategory)
   .delete(auth, category.deletecategory);
 
+router
+  .route('/products/category/:categoryID')
+  .get(category.fetchProductsByCategory);
 module.exports = router;
