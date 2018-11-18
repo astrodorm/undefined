@@ -97,7 +97,7 @@ exports.updateOrderStatus = async (req, res) => {
 
 exports.getAllOrders = async (req, res) => {
   try {
-    const orders = await db.Order.find({});
+    const orders = await db.Order.find({}).sort({ createdAt: 1 });
     res.status(200).json({ status: 200, data: orders });
   } catch (e) {
     Emessage(e, res);
@@ -153,7 +153,7 @@ exports.updateOrder = async (req, res) => {
 exports.getAllOrdersCustomer = async (req, res) => {
   try {
     const customerID = req.customer._id;
-    const orders = await db.Order.find({ customerID });
+    const orders = await db.Order.find({ customerID }).sort({ createdAt: 1 });
     res.status(200).json({ status: 200, data: orders });
   } catch (e) {
     Emessage(e, res);
