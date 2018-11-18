@@ -6,7 +6,7 @@ exports.addToCart = async (req, res) => {
   try {
     let customerID = req.customer._id;
 
-    let [existing] = await db.ShoppingList.find({
+    /*     let [existing] = await db.ShoppingList.find({
       customerID,
       list: req.body.productID
     });
@@ -32,9 +32,14 @@ exports.addToCart = async (req, res) => {
       list: req.body.productID,
       customerID,
       quantity: req.body.quantity
-    });
-
-    return res.status(200).json({ status: 200, data: newShoppingList });
+    }); */
+    let cart = req.body.cart.map(item => ({
+      list: item.productID,
+      customerID,
+      quantity: item.quantity
+    }));
+    let shoppingList = await db.ShoppingList.insertMany(cart);
+    return res.status(200).json({ status: 200, data: shoppingList });
   } catch (e) {
     Emessage(e, res);
   }
