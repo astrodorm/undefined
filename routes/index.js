@@ -133,11 +133,11 @@ router.route('/cards/charge/:reference').get(customerAuth, card.getPending);
 router
   .route('/category')
   .post(auth, category.createcategory)
-  .get(auth, category.fetchcategories);
+  .get(category.fetchcategories);
 
 router
   .route('/category/:id')
-  .get(auth, category.fetchAcategory)
+  .get(category.fetchAcategory)
   .put(auth, category.editcategory)
   .delete(auth, category.deletecategory);
 
