@@ -6,37 +6,17 @@ exports.addToCart = async (req, res) => {
   try {
     let customerID = req.customer._id;
 
-    /*     let [existing] = await db.ShoppingList.find({
-      customerID,
-      list: req.body.productID
-    });
+    if (!req.body.deliveryMethod)
+      return res.status({
+        status: 400,
+        message: `Delivery method is important`
+      });
 
-    if (req.body.quantity && isNaN(Number(req.body.quantity)))
-      return res
-        .status(400)
-        .json({ status: 400, message: `quantity must be number` });
-
-    if (existing) {
-      let updatedShoppingList = await db.ShoppingList.findOneAndUpdate(
-        {
-          _id: existing._id
-        },
-        { quantity: req.body.quantity },
-        { new: true }
-      );
-
-      return res.status(200).json({ status: 200, data: updatedShoppingList });
-    }
-
-    let newShoppingList = await db.ShoppingList.create({
-      list: req.body.productID,
-      customerID,
-      quantity: req.body.quantity
-    }); */
     let cart = req.body.cart.map(item => ({
       list: item.productID,
       customerID,
-      quantity: item.quantity
+      quantity: item.quantity,
+      deliveryMethod: req.body.deliveryMethod
     }));
     let shoppingList = await db.ShoppingList.insertMany(cart);
     return res.status(200).json({ status: 200, data: shoppingList });
