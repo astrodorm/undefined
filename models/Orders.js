@@ -24,7 +24,8 @@ const orderSchema = new mongoose.Schema(
       ref: 'Feedback'
     },
     totalCost: Number,
-    paymentReference: String
+    paymentReference: String,
+    deliveryMethod: String
   },
   { timestamps: true }
 );

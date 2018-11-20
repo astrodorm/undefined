@@ -32,3 +32,4 @@ module.exports.Driver = require('./Driver');
 module.exports.Staff = require('./Staff');
 module.exports.Category = require('./Category');
 module.exports.OrderHistory = require('./OrderHistory');
+module.exports.Fees = require('./Fees');

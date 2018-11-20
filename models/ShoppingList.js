@@ -15,7 +15,8 @@ const shoppingListSchema = new mongoose.Schema(
     quantity: {
       type: Number,
       default: 1
-    }
+    },
+    deliveryMethod: String
   },
   { timestamps: true }
 );

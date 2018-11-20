@@ -13,6 +13,7 @@ const order = require('../helpers/order');
 const feedback = require('../helpers/feedback');
 const card = require('../helpers/card');
 const category = require('../helpers/category');
+const fee = require('../helpers/fees');
 
 router
   .route('/staff')
@@ -144,4 +145,15 @@ router
 router
   .route('/products/category/:categoryID')
   .get(category.fetchProductsByCategory);
+
+router
+  .route('/fees')
+  .post(auth, fee.createFees)
+  .get(fee.fetchfees);
+
+router
+  .route('/fees/:id')
+  .get(fee.fetchAfee)
+  .put(auth, fee.editfee)
+  .delete(auth, fee.deletefee);
 module.exports = router;
