@@ -25,7 +25,8 @@ exports.createCustomerOrder = async (req, res) => {
         thumbnail: product.list.thumbnail,
         merchantID: product.list.merchantID,
         quantity: product.quantity,
-        customerID
+        customerID,
+        deliveryMethod: product.deliveryMethod
       };
       return item;
     });
@@ -51,7 +52,8 @@ exports.createCustomerOrder = async (req, res) => {
       driverReferenceNumber: 0,
       totalCost,
       customerID,
-      paymentReference
+      paymentReference,
+      deliveryMethod: shoppingList[0].deliveryMethod
     });
 
     let shoppingListIds = shoppingList.map(item => item._id);
