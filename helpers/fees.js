@@ -14,7 +14,12 @@ exports.createFees = async (req, res) => {
         status: 400,
         message: `Delivery fee must be numbers`
       });
-    let inputs = ['convenience', 'delivery'];
+    if (req.body.maxConvenience && isNaN(Number(req.body.maxConvenience)))
+      return res.status(400).json({
+        status: 400,
+        message: `Maximum convenience fee must be numbers`
+      });
+    let inputs = ['convenience', 'delivery', 'maxConvenience'];
 
     let errMessages = Validator(inputs, req);
     if (errMessages.length >= 1)
@@ -48,6 +53,12 @@ exports.editfee = async (req, res) => {
       return res.status(400).json({
         status: 400,
         message: `Delivery fee must be numbers`
+      });
+
+    if (req.body.maxConvenience && isNaN(Number(req.body.maxConvenience)))
+      return res.status(400).json({
+        status: 400,
+        message: `Maximum convenience fee must be numbers`
       });
 
     const fee = await db.Fees.findOneAndUpdate(
