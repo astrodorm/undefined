@@ -74,6 +74,12 @@ exports.updateOrderStatus = async (req, res) => {
   try {
     // search order with shopperReferenceNumber where status is not DELIVERED and update status,
     let shopperReferenceNumber = req.body.shopperReferenceNumber;
+    let orderID = req.body.orderID;
+    if (!orderID)
+      return res.status(400).json({
+        status: 400,
+        message: `Please enter Order's _id`
+      });
     if (!shopperReferenceNumber)
       return res.status(400).json({
         status: 400,
@@ -81,7 +87,7 @@ exports.updateOrderStatus = async (req, res) => {
       });
     let status = req.body.status;
     const order = await db.Order.findOneAndUpdate(
-      { shopperReferenceNumber, status: { $ne: 'DELIVERED' } },
+      { _id: orderID, shopperReferenceNumber, status: { $ne: 'DELIVERED' } },
       { status },
       { new: true }
     );
