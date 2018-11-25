@@ -19,7 +19,23 @@ exports.createFees = async (req, res) => {
         status: 400,
         message: `Maximum convenience fee must be numbers`
       });
-    let inputs = ['convenience', 'delivery', 'maxConvenience'];
+    if (req.body.minDelivery && isNaN(Number(req.body.minDelivery)))
+      return res.status(400).json({
+        status: 400,
+        message: `Minimum Delivery fee must be numbers`
+      });
+    if (req.body.maxDelivery && isNaN(Number(req.body.maxDelivery)))
+      return res.status(400).json({
+        status: 400,
+        message: `Maximum Delivery fee must be numbers`
+      });
+    let inputs = [
+      'convenience',
+      'delivery',
+      'maxConvenience',
+      'minDelivery',
+      'maxDelivery'
+    ];
 
     let errMessages = Validator(inputs, req);
     if (errMessages.length >= 1)

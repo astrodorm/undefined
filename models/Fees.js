@@ -4,7 +4,9 @@ const feeSchema = new mongoose.Schema(
   {
     convenience: Number,
     delivery: Number,
-    maxConvenience: Number
+    maxConvenience: Number,
+    minDelivery: Number,
+    maxDelivery: Number
   },
   { timestamps: true }
 );
