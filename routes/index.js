@@ -14,6 +14,7 @@ const feedback = require('../helpers/feedback');
 const card = require('../helpers/card');
 const category = require('../helpers/category');
 const fee = require('../helpers/fees');
+const notFound = require('../helpers/notFound');
 
 router
   .route('/staff')
@@ -156,4 +157,9 @@ router
   .get(fee.fetchAfee)
   .put(auth, fee.editfee)
   .delete(auth, fee.deletefee);
+
+router
+  .route('/notfound')
+  .post(notFound.notFound)
+  .get(notFound.fetchNotFound);
 module.exports = router;

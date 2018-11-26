@@ -33,3 +33,4 @@ module.exports.Staff = require('./Staff');
 module.exports.Category = require('./Category');
 module.exports.OrderHistory = require('./OrderHistory');
 module.exports.Fees = require('./Fees');
+module.exports.NotFound = require('./NotFound');
