@@ -25,7 +25,9 @@ const orderSchema = new mongoose.Schema(
     },
     totalCost: Number,
     paymentReference: String,
-    deliveryMethod: String
+    deliveryMethod: String,
+    convenienceFee: Number,
+    deliveryFee: Number
   },
   { timestamps: true }
 );

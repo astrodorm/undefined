@@ -26,7 +26,9 @@ exports.createCustomerOrder = async (req, res) => {
         merchantID: product.list.merchantID,
         quantity: product.quantity,
         customerID,
-        deliveryMethod: product.deliveryMethod
+        deliveryMethod: product.deliveryMethod,
+        convenienceFee: product.convenienceFee,
+        deliveryFee: product.deliveryFee
       };
       return item;
     });
@@ -53,11 +55,12 @@ exports.createCustomerOrder = async (req, res) => {
       totalCost,
       customerID,
       paymentReference,
-      deliveryMethod: shoppingList[0].deliveryMethod
+      deliveryMethod: shoppingList[0].deliveryMethod,
+      convenienceFee: shoppingList[0].convenienceFee,
+      deliveryFee: shoppingList[0].deliveryFee
     });
 
     let shoppingListIds = shoppingList.map(item => item._id);
-    console.log({ shoppingListIds });
 
     let cartEmptied = await db.ShoppingList.deleteMany({
       customerID,
