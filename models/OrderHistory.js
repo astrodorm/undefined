@@ -19,7 +19,8 @@ const produceOrderSchema = new mongoose.Schema(
     },
     deliveryMethod: String,
     convenienceFee: Number,
-    deliveryFee: Number
+    deliveryFee: Number,
+    total:Number
   },
   { timestamps: true }
 );

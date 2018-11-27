@@ -23,11 +23,12 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Feedback'
     },
-    totalCost: Number,
+    // totalCost: Number,
     paymentReference: String,
     deliveryMethod: String,
     convenienceFee: Number,
-    deliveryFee: Number
+    deliveryFee: Number,
+    total:Number
   },
   { timestamps: true }
 );

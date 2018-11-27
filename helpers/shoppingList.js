@@ -18,7 +18,8 @@ exports.addToCart = async (req, res) => {
       quantity: item.quantity,
       deliveryMethod: req.body.deliveryMethod,
       convenienceFee: req.body.convenienceFee,
-      deliveryFee: req.body.deliveryFee
+      deliveryFee: req.body.deliveryFee,
+      total: req.body.total
     }));
     let shoppingList = await db.ShoppingList.insertMany(cart);
     return res.status(200).json({ status: 200, data: shoppingList });

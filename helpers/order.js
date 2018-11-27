@@ -13,10 +13,10 @@ exports.createCustomerOrder = async (req, res) => {
         message: `Customer does not yet have a shopping list`
       });
 
-    let totalCost = shoppingList.reduce(
+/*     let totalCost = shoppingList.reduce(
       (initial, item) => initial + item.quantity * item.list.price,
       0
-    );
+    ); */
 
     const productOrdered = shoppingList.map(product => {
       const item = {
@@ -28,7 +28,8 @@ exports.createCustomerOrder = async (req, res) => {
         customerID,
         deliveryMethod: product.deliveryMethod,
         convenienceFee: product.convenienceFee,
-        deliveryFee: product.deliveryFee
+        deliveryFee: product.deliveryFee,
+        total: product.total
       };
       return item;
     });
@@ -52,12 +53,13 @@ exports.createCustomerOrder = async (req, res) => {
       shopperReferenceNumber: shopper[0].referenceNumber,
       status: 'PENDING',
       driverReferenceNumber: 0,
-      totalCost,
+      // totalCost,
       customerID,
       paymentReference,
       deliveryMethod: shoppingList[0].deliveryMethod,
       convenienceFee: shoppingList[0].convenienceFee,
-      deliveryFee: shoppingList[0].deliveryFee
+      deliveryFee: shoppingList[0].deliveryFee,
+      total: shoppingList[0].total
     });
 
     let shoppingListIds = shoppingList.map(item => item._id);
