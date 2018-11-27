@@ -24,6 +24,10 @@ const productSchema = new mongoose.Schema(
     categoryID: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Category'
+    },
+    isAvailable: {
+      type: Boolean,
+      default: true
     }
   },
   { timestamps: true }

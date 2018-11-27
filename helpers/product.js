@@ -38,7 +38,8 @@ exports.createProduct = async (req, res) => {
       'price',
       'merchantID',
       'isPickupAvailable',
-      'categoryID'
+      'categoryID',
+      'isAvailable'
     ];
 
     let errMessages = Validator(inputs, req);
@@ -132,7 +133,8 @@ exports.searchForProduct = async (req, res) => {
       productName: {
         $regex: new RegExp(q),
         $options: 'i'
-      }
+      },
+      isAvailable: true
     });
 
     res.status(200).json({ status: 200, data: products });
