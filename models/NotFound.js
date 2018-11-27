@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 
 const notFoundSchema = new mongoose.Schema(
   {
-    searchedItem: String
+    searchedItem: String,
+    email: String,
+    phoneNumber: String,
+    status: String
   },
   { timestamps: true }
 );
