@@ -160,6 +160,11 @@ router
 
 router
   .route('/notfound')
-  .post(notFound.notFound)
-  .get(notFound.fetchNotFound);
+  .post(customerAuth, notFound.notFound)
+  .get(auth, notFound.fetchNotFound);
+
+router
+  .route('/notfound/:id')
+  .put(auth, notFound.editNotFound)
+  .get(auth, notFound.getSingle);
 module.exports = router;
