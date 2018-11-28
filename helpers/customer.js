@@ -73,7 +73,7 @@ exports.currentlyLoggedInCustomer = async (req, res) => {
 
 exports.getAllCustomersForAdminUsage = async (req, res) => {
   try {
-    const customers = await db.Customer.find({});
+    const customers = await db.Customer.find({}).sort({ createdAt: -1 });
     res.status(200).json({ status: 200, data: customers });
   } catch (e) {
     Emessage(e, res);

@@ -7,12 +7,10 @@ exports.createshopper = async (req, res) => {
       isNaN(Number(req.body.phoneNumber)) ||
       isNaN(Number(req.body.referenceNumber))
     )
-      return res
-        .status(400)
-        .json({
-          status: 400,
-          message: `Only numeric values allowed for reference number and phone number`
-        });
+      return res.status(400).json({
+        status: 400,
+        message: `Only numeric values allowed for reference number and phone number`
+      });
 
     const refNo = await db.Shopper.findOne({
       referenceNumber: req.body.referenceNumber
@@ -46,7 +44,7 @@ exports.createshopper = async (req, res) => {
 
 exports.fetchshoppers = async (req, res) => {
   try {
-    const shoppers = await db.Shopper.find({});
+    const shoppers = await db.Shopper.find({}).sort({ createdAt: -1 });
     res.status(200).json({ status: 200, data: shoppers });
   } catch (e) {
     Emessage(e, res);

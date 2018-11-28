@@ -14,7 +14,7 @@ exports.notFound = async (req, res) => {
 
 exports.fetchNotFound = async (req, res) => {
   try {
-    const notFounds = await db.NotFound.find({});
+    const notFounds = await db.NotFound.find({}).sort({ createdAt: -1 });
     res.status(200).json({ status: 200, data: notFounds });
   } catch (e) {
     Emessage(e, res);

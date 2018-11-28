@@ -27,7 +27,7 @@ exports.createMerchants = async (req, res) => {
 
 exports.fetchAllMerchants = async (req, res) => {
   try {
-    const merchants = await db.Merchant.find({});
+    const merchants = await db.Merchant.find({}).sort({ createdAt: -1 });
     res.status(200).json({ status: 200, data: merchants });
   } catch (e) {
     return res.status(401).json({ status: 401, message: err });
@@ -49,7 +49,7 @@ exports.fetchMerchantsByLocation = async (req, res) => {
       }
     };
 
-    const merchants = await db.Merchant.find(query);
+    const merchants = await db.Merchant.find(query).sort({ createdAt: -1 });
     res.status(200).json({ status: 200, data: merchants });
   } catch (e) {
     Emessage(e, res);
@@ -62,7 +62,7 @@ exports.searchMerchantByName = async (req, res) => {
 
     const merchants = await db.Merchant.find({
       name: { $regex: new RegExp(q), $options: 'i' }
-    });
+    }).sort({ createdAt: -1 });
 
     res.status(200).json({ status: 200, data: merchants });
   } catch (e) {

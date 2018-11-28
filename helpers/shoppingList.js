@@ -56,7 +56,9 @@ exports.removeFromCart = async (req, res) => {
 exports.fetchCustomerCart = async (req, res) => {
   try {
     let customerID = req.customer._id;
-    let cart = await db.ShoppingList.find({ customerID });
+    let cart = await db.ShoppingList.find({ customerID }).sort({
+      createdAt: -1
+    });
     return res.status(200).json({ status: 200, data: cart });
   } catch (e) {
     Emessage(e, res);

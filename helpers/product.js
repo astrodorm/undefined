@@ -74,7 +74,7 @@ exports.editProduct = async (req, res) => {
 
 exports.fetchAllProducts = async (req, res) => {
   try {
-    const products = await db.Product.find({});
+    const products = await db.Product.find({}).sort({ createdAt: -1 });
     res.status(200).json({ status: 200, data: products });
   } catch (e) {
     Emessage(e, res);

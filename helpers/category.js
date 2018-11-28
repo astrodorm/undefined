@@ -18,7 +18,7 @@ exports.createcategory = async (req, res) => {
 
 exports.fetchcategories = async (req, res) => {
   try {
-    const categories = await db.Category.find({});
+    const categories = await db.Category.find({}).sort({ createdAt: -1 });
     res.status(200).json({ status: 200, data: categories });
   } catch (e) {
     Emessage(e, res);

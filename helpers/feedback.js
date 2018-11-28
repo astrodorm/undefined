@@ -41,7 +41,8 @@ exports.fetchAllFeedbacks = async (req, res) => {
   try {
     const feedBacks = await db.FeedBack.find({})
       .populate('driverID', 'firstname lastname referenceNumber')
-      .populate('customerID', 'firstname lastname email');
+      .populate('customerID', 'firstname lastname email')
+      .sort({ createdAt: -1 });
 
     res.status(200).json({ status: 200, data: feedBacks });
   } catch (e) {

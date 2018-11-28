@@ -38,7 +38,7 @@ exports.createdriver = async (req, res) => {
 
 exports.fetchdrivers = async (req, res) => {
   try {
-    const drivers = await db.Driver.find({});
+    const drivers = await db.Driver.find({}).sort({ createdAt: -1 });
     res.status(200).json({ status: 200, data: drivers });
   } catch (e) {
     Emessage(e, res);

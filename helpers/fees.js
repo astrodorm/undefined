@@ -50,7 +50,7 @@ exports.createFees = async (req, res) => {
 
 exports.fetchfees = async (req, res) => {
   try {
-    const fees = await db.Fees.find({});
+    const fees = await db.Fees.find({}).sort({ createdAt: -1 });
     res.status(200).json({ status: 200, data: fees });
   } catch (e) {
     Emessage(e, res);

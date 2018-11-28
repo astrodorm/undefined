@@ -66,7 +66,7 @@ exports.getStaff = async (req, res) => {
 
 exports.fetchAllStaffs = async (req, res) => {
   try {
-    const staffs = await db.Staff.find({});
+    const staffs = await db.Staff.find({}).sort({ createdAt: -1 });
     res.status(200).json({ status: 200, data: staffs });
   } catch (e) {
     Emessage(e, res);
