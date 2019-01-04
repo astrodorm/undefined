@@ -15,6 +15,7 @@ const card = require('../helpers/card');
 const category = require('../helpers/category');
 const fee = require('../helpers/fees');
 const notFound = require('../helpers/notFound');
+const catalogue = require('../helpers/catalogue');
 
 router
   .route('/staff')
@@ -167,4 +168,10 @@ router
   .route('/notfound/:id')
   .put(auth, notFound.editNotFound)
   .get(auth, notFound.getSingle);
+
+router.route('/catalogue').post(catalogue.parseCSVCatalogue);
+router.route('/catalogue').get(catalogue.getAllCatalogues);
+router.route('/catalogue/template').get(catalogue.csvTemplate);
+router.route('/catalogue/:itemID').get(catalogue.getACatalogue);
+
 module.exports = router;
