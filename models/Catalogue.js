@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const catalogueSchema = new mongoose.Schema({
-  itemID: { type: String, index: true },
+  itemCode: { type: String, index: true },
   thumbnail: String,
   itemName: { type: String, trim: true }
 });
