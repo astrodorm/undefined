@@ -3,7 +3,7 @@ const Json2csvParser = require('json2csv').Parser;
 const db = require('../models');
 
 exports.csvTemplate = async (req, res) => {
-  const fields = ['itemID', 'itemName', 'thumbnail'];
+  const fields = ['itemCode', 'itemName', 'thumbnail'];
   const data = '';
   const json2csvParser = new Json2csvParser({ fields });
   const csv = json2csvParser.parse(data);
@@ -61,7 +61,9 @@ exports.getAllCatalogues = async (req, res) => {
 
 exports.getACatalogue = async (req, res) => {
   try {
-    const catalogue = await db.Catalogue.findOne({ itemID: req.params.itemID });
+    const catalogue = await db.Catalogue.findOne({
+      itemCode: req.params.itemCode
+    });
     return res.status(200).json({ status: 200, data: catalogue });
   } catch (e) {
     return res.status(400).json({ status: 400, message: e.message });
