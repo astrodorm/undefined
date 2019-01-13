@@ -35,3 +35,4 @@ module.exports.OrderHistory = require('./OrderHistory');
 module.exports.Fees = require('./Fees');
 module.exports.NotFound = require('./NotFound');
 module.exports.Catalogue = require('./Catalogue');
+module.exports.ProductV2 = require('./ProductV2');

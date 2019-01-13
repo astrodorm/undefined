@@ -16,6 +16,7 @@ const category = require('../helpers/category');
 const fee = require('../helpers/fees');
 const notFound = require('../helpers/notFound');
 const catalogue = require('../helpers/catalogue');
+const productV2 = require('../helpers/productV2');
 
 router
   .route('/staff')
@@ -169,9 +170,16 @@ router
   .put(auth, notFound.editNotFound)
   .get(auth, notFound.getSingle);
 
-router.route('/catalogue').post(catalogue.parseCSVCatalogue);
-router.route('/catalogue').get(catalogue.getAllCatalogues);
+router.route('/catalogue').post(auth, catalogue.parseCSVCatalogue);
+router.route('/catalogue').get(auth, catalogue.getAllCatalogues);
 router.route('/catalogue/template').get(catalogue.csvTemplate);
-router.route('/catalogue/:itemID').get(catalogue.getACatalogue);
+router.route('/catalogue/:itemCode').get(auth, catalogue.getACatalogue);
 
+router.route('/products/v2/template').get(productV2.csvTemplateForProducts);
+router.route('/products/v2/csv').post(auth, productV2.parseCSVProduct);
+router.route('/products/v2/search').post(productV2.searchForProduct);
+router.route('/products/v2/:itemCode').get(productV2.getProductByItemCode);
+router
+  .route('/products/v2/category/:categoryID')
+  .get(productV2.getProductByCategory);
 module.exports = router;
