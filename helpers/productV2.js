@@ -1,8 +1,19 @@
 const csv = require('fast-csv');
 const Json2csvParser = require('json2csv').Parser;
 const db = require('../models');
-const pool = require('../models/connect3rdParty');
+// const pool = require('../models/connect3rdParty');
 const { reusable } = require('../utils/dbFunction');
+
+const sql = require('mssql');
+
+const config = {
+  user: process.env.user,
+  password: process.env.password,
+  server: process.env.server,
+  database: process.env.database
+};
+
+let connection = new sql.ConnectionPool(config);
 
 exports.csvTemplateForProducts = async (req, res) => {
   const fields = ['itemCode', 'merchantID', 'categoryID'];
@@ -70,6 +81,7 @@ exports.parseCSVProduct = async (req, res) => {
 exports.searchForProduct = async (req, res) => {
   try {
     let value = req.body.item.toUpperCase();
+    let pool = await connection.connect();
     let result = await pool
       .request()
       .query(
@@ -79,6 +91,7 @@ exports.searchForProduct = async (req, res) => {
       result.recordset.map(async stuff => await reusable(stuff))
     );
     res.status(200).json(item);
+    pool.close();
   } catch (err) {
     console.log(err);
     res.status(400).json(err.message);
@@ -88,6 +101,7 @@ exports.searchForProduct = async (req, res) => {
 exports.getProductByItemCode = async (req, res) => {
   try {
     let itemCode = req.params.itemCode;
+    let pool = await connection.connect();
     let result = await pool
       .request()
       .query(
@@ -97,6 +111,7 @@ exports.getProductByItemCode = async (req, res) => {
       result.recordset.map(async stuff => await reusable(stuff))
     );
     res.status(200).json({ status: 200, data: item });
+    pool.close();
   } catch (err) {
     console.log(err);
     res.status(400).json(err.message);
@@ -104,10 +119,39 @@ exports.getProductByItemCode = async (req, res) => {
 };
 
 exports.getProductByCategory = async (req, res) => {
-  let categoryID = req.params.categoryID;
-  const products = await db.ProductV2.find({ categoryID });
-  let category = await Promise.all(
-    products.map(async stuff => await reusable(stuff))
-  );
-  res.status(200).json({ status: 200, data: category });
+  try {
+    let categoryID = req.params.categoryID;
+    const products = await db.ProductV2.find({ categoryID });
+    let pool = await connection.connect();
+    let category = await Promise.all(
+      products.map(async stuff => {
+        let r = await pool
+          .request()
+          .query(
+            `select ITEMCODE, DESCRIPTION, QTY, SELLINGPRICE from STOCKTABLE where ITEMCODE = '${
+              stuff.itemCode
+            }'`
+          );
+        return r.recordset[0];
+      })
+    );
+
+    item = [];
+    // reason for this is to remove null that map sometimes return
+    for (let cat of category) {
+      if (cat) {
+        item.push(cat);
+      }
+    }
+
+    category = await Promise.all(
+      item.map(async stuff => await reusable(stuff))
+    );
+
+    res.status(200).json({ status: 200, data: category });
+    pool.close();
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err.message);
+  }
 };
