@@ -17,6 +17,7 @@ const fee = require('../helpers/fees');
 const notFound = require('../helpers/notFound');
 const catalogue = require('../helpers/catalogue');
 const productV2 = require('../helpers/productV2');
+const shoppingListV2 = require('../helpers/shoppingListV2');
 
 router
   .route('/staff')
@@ -182,4 +183,13 @@ router.route('/products/v2/:itemCode').get(productV2.getProductByItemCode);
 router
   .route('/products/v2/category/:categoryID')
   .get(productV2.getProductByCategory);
+
+router.route('/carts/v2/add').post(customerAuth, shoppingListV2.addToCart);
+router
+  .route('/carts/v2/fetch')
+  .get(customerAuth, shoppingListV2.fetchCustomerCart);
+router
+  .route('/carts/v2/remove/:itemCode')
+  .post(customerAuth, shoppingListV2.removeFromCart);
+  
 module.exports = router;

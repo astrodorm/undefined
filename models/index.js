@@ -36,3 +36,4 @@ module.exports.Fees = require('./Fees');
 module.exports.NotFound = require('./NotFound');
 module.exports.Catalogue = require('./Catalogue');
 module.exports.ProductV2 = require('./ProductV2');
+module.exports.ShoppingListV2 = require('./ShoppingListV2');

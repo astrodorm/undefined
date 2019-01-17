@@ -1,12 +1,8 @@
 const db = require('../models');
 
 exports.reusable = async stuff => {
-  let itemCode;
-  if (stuff.ITEMCODE) {
-    itemCode = stuff.ITEMCODE;
-  } else {
-    itemCode = stuff.itemCode;
-  }
+  let itemCode = stuff.ITEMCODE;
+
   const cataloguePromise = db.Catalogue.findOne({
     itemCode
   });
