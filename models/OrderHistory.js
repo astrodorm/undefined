@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const produceOrderSchema = new mongoose.Schema(
   {
+    itemCode: String,
     productName: { type: String, trim: true },
     thumbnail: String,
     price: Number,
@@ -20,7 +21,7 @@ const produceOrderSchema = new mongoose.Schema(
     deliveryMethod: String,
     convenienceFee: Number,
     deliveryFee: Number,
-    total:Number
+    total: Number
   },
   { timestamps: true }
 );
