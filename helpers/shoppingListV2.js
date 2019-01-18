@@ -19,7 +19,7 @@ exports.addToCart = async (req, res) => {
       convenienceFee: req.body.convenienceFee,
       deliveryFee: req.body.deliveryFee,
       sellingPrice: item.sellingPrice,
-      total: req.body.totalPrice,
+      total: req.body.total,
       productName: item.productName
     }));
     let shoppingList = await db.ShoppingListV2.insertMany(cart);
