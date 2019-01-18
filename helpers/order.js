@@ -33,6 +33,7 @@ exports.createCustomerOrder = async (req, res) => {
           deliveryMethod: product.deliveryMethod,
           convenienceFee: product.convenienceFee,
           deliveryFee: product.deliveryFee,
+          deliveryTime: product.deliveryTime,
           total: product.total
         };
         return item;
@@ -66,6 +67,7 @@ exports.createCustomerOrder = async (req, res) => {
       deliveryMethod: shoppingList[0].deliveryMethod,
       convenienceFee: shoppingList[0].convenienceFee,
       deliveryFee: shoppingList[0].deliveryFee,
+      deliveryTime: shoppingList[0].deliveryTime,
       total: shoppingList[0].total
     });
 

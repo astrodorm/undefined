@@ -21,6 +21,7 @@ const produceOrderSchema = new mongoose.Schema(
     deliveryMethod: String,
     convenienceFee: Number,
     deliveryFee: Number,
+    deliveryTime: String,
     total: Number
   },
   { timestamps: true }

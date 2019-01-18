@@ -18,7 +18,8 @@ const shoppingListSchema = new mongoose.Schema(
     convenienceFee: Number,
     deliveryFee: Number,
     total: Number,
-    sellingPrice: Number
+    sellingPrice: Number,
+    deliveryTime: String
   },
   { timestamps: true }
 );

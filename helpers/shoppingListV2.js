@@ -18,6 +18,7 @@ exports.addToCart = async (req, res) => {
       deliveryMethod: req.body.deliveryMethod,
       convenienceFee: req.body.convenienceFee,
       deliveryFee: req.body.deliveryFee,
+      deliveryTime: req.body.deliveryTime,
       sellingPrice: item.sellingPrice,
       total: req.body.total,
       productName: item.productName
@@ -50,6 +51,7 @@ exports.fetchCustomerCart = async (req, res) => {
           deliveryMethod: item.deliveryMethod,
           convenienceFee: item.convenienceFee,
           deliveryFee: item.deliveryFee,
+          deliveryTime: item.deliveryTime,
           sellingPrice: item.sellingPrice,
           total: item.total,
           productName: item.productName,
