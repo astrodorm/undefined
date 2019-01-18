@@ -1,38 +1,45 @@
 const db = require('../models');
 const { Emessage } = require('../utils/err');
-const { calculateTotalPrice } = require('../utils/totalCost');
 
 exports.createCustomerOrder = async (req, res) => {
   try {
     const customerID = req.customer._id;
 
-    let shoppingList = await db.ShoppingList.find({ customerID });
+    let shoppingList = await db.ShoppingListV2.find({ customerID });
     if (shoppingList.length < 1)
       return res.status(400).json({
         status: 400,
         message: `Customer does not yet have a shopping list`
       });
 
-/*     let totalCost = shoppingList.reduce(
-      (initial, item) => initial + item.quantity * item.list.price,
-      0
-    ); */
+    const productOrdered = await Promise.all(
+      shoppingList.map(async product => {
+        let catalogue = await db.Catalogue.findOne({
+          itemCode: product.itemCode
+        });
 
-    const productOrdered = shoppingList.map(product => {
-      const item = {
-        productName: product.list.productName,
-        price: product.list.price,
-        thumbnail: product.list.thumbnail,
-        merchantID: product.list.merchantID,
-        quantity: product.quantity,
-        customerID,
-        deliveryMethod: product.deliveryMethod,
-        convenienceFee: product.convenienceFee,
-        deliveryFee: product.deliveryFee,
-        total: product.total
-      };
-      return item;
-    });
+        let thumbnail;
+        if (catalogue && catalogue.thumbnail) {
+          thumbnail = catalogue.thumbnail;
+        }
+        const item = {
+          itemCode: product.itemCode,
+          productName: product.productName,
+          price: product.sellingPrice,
+          thumbnail,
+          // merchantID: product.list.merchantID,
+          quantity: product.quantity,
+          customerID,
+          deliveryMethod: product.deliveryMethod,
+          convenienceFee: product.convenienceFee,
+          deliveryFee: product.deliveryFee,
+          total: product.total
+        };
+        return item;
+      })
+    );
+
+    console.log(productOrdered);
 
     const orderHistory = await db.OrderHistory.insertMany(productOrdered);
 
@@ -62,11 +69,11 @@ exports.createCustomerOrder = async (req, res) => {
       total: shoppingList[0].total
     });
 
-    let shoppingListIds = shoppingList.map(item => item._id);
+    let shoppingListIds = shoppingList.map(item => item.itemCode);
 
-    let cartEmptied = await db.ShoppingList.deleteMany({
+    let cartEmptied = await db.ShoppingListV2.deleteMany({
       customerID,
-      _id: { $in: shoppingListIds }
+      itemCode: { $in: shoppingListIds }
     });
 
     res.status(200).json({ status: 200, data: orders });
