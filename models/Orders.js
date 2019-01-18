@@ -23,21 +23,20 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.SchemaTypes.ObjectId,
       ref: 'Feedback'
     },
-    // totalCost: Number,
     paymentReference: String,
     deliveryMethod: String,
     convenienceFee: Number,
     deliveryFee: Number,
-    total:Number
+    total: Number
   },
   { timestamps: true }
 );
 
 function autopopulate(next) {
-  this.populate('productID', 'productName price thumbnail quantity').populate(
-    'customerID',
-    'firstname lastname address phoneNumber email'
-  );
+  this.populate(
+    'productID',
+    'itemCode productName price thumbnail quantity'
+  ).populate('customerID', 'firstname lastname address phoneNumber email');
   next();
 }
 
