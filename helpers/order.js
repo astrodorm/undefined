@@ -40,8 +40,6 @@ exports.createCustomerOrder = async (req, res) => {
       })
     );
 
-    console.log(productOrdered);
-
     const orderHistory = await db.OrderHistory.insertMany(productOrdered);
 
     const orderHistoryIDs = orderHistory.map(item => item._id);
@@ -61,7 +59,6 @@ exports.createCustomerOrder = async (req, res) => {
       shopperReferenceNumber: shopper[0].referenceNumber,
       status: 'PENDING',
       driverReferenceNumber: 0,
-      // totalCost,
       customerID,
       paymentReference,
       deliveryMethod: shoppingList[0].deliveryMethod,
