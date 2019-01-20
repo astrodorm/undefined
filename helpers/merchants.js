@@ -101,3 +101,28 @@ exports.editMerchant = async (req, res) => {
     Emessage(e, res);
   }
 };
+
+exports.fetchMerchantNearBy = async (req, res) => {
+  try {
+    const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
+    const query = {
+      location: {
+        $near: {
+          $geometry: {
+            type: 'Point',
+            coordinates
+          },
+          $maxDistance: 1000 //1000m
+        }
+      }
+    };
+
+    const merchants = await db.Merchant.find(query).sort({ createdAt: -1 });
+    let nearby;
+    if (merchants.length >= 1) nearby = true;
+    else nearby = false;
+    res.status(200).json({ status: 200, nearby });
+  } catch (e) {
+    Emessage(e, res);
+  }
+};

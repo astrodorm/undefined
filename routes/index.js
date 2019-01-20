@@ -38,6 +38,7 @@ router
 
 router.route('/merchants/near').get(merchant.fetchMerchantsByLocation);
 router.route('/merchants/search').get(merchant.searchMerchantByName);
+router.route('/merchants/closeby').get(merchant.fetchMerchantNearBy);
 
 router
   .route('/merchants/:id')
@@ -191,5 +192,5 @@ router
 router
   .route('/carts/v2/remove/:itemCode')
   .post(customerAuth, shoppingListV2.removeFromCart);
-  
+
 module.exports = router;
