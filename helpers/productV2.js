@@ -85,7 +85,7 @@ exports.searchForProduct = async (req, res) => {
     let result = await pool
       .request()
       .query(
-        `select ITEMCODE, DESCRIPTION, QTY, SELLINGPRICE from STOCKTABLE where DESCRIPTION LIKE('%${value}%')`
+        `select ITEMCODE, DESCRIPTION, QTY, SELLINGPRICE from STOCKTABLE where QTY > 2 AND DESCRIPTION LIKE('%${value}%')`
       );
     let item = await Promise.all(
       result.recordset.map(async stuff => await reusable(stuff))
@@ -105,7 +105,7 @@ exports.getProductByItemCode = async (req, res) => {
     let result = await pool
       .request()
       .query(
-        `select ITEMCODE, DESCRIPTION, QTY, SELLINGPRICE from STOCKTABLE where ITEMCODE = '${itemCode}'`
+        `select ITEMCODE, DESCRIPTION, QTY, SELLINGPRICE from STOCKTABLE where QTY > 2 AND ITEMCODE = '${itemCode}'`
       );
     let item = await Promise.all(
       result.recordset.map(async stuff => await reusable(stuff))
@@ -128,7 +128,7 @@ exports.getProductByCategory = async (req, res) => {
         let r = await pool
           .request()
           .query(
-            `select ITEMCODE, DESCRIPTION, QTY, SELLINGPRICE from STOCKTABLE where ITEMCODE = '${
+            `select ITEMCODE, DESCRIPTION, QTY, SELLINGPRICE from STOCKTABLE where QTY > 2 AND ITEMCODE = '${
               stuff.itemCode
             }'`
           );
