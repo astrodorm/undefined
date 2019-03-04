@@ -127,9 +127,9 @@ exports.getProductByCategory = async (req, res) => {
     console.log("skipCount", skipCount);
     console.log("limitCount", limitCount)
 
-    const products = await db.ProductV2.find({ categoryID })
+    const products = await db.ProductV2.find({ categoryID }).skip(skipCount).limit(limitCount);
 
-    console.log("products", products);
+    // console.log("products", products);
 
     let pool = await connection.connect();
     let category = await Promise.all(
