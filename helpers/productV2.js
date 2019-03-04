@@ -121,7 +121,10 @@ exports.getProductByItemCode = async (req, res) => {
 exports.getProductByCategory = async (req, res) => {
   try {
     let categoryID = req.params.categoryID;
-    const products = await db.ProductV2.find({ categoryID });
+    let skipCount = req.query.skipCount;
+    let limitCount = req.query.limitCount;
+
+    const products = await db.ProductV2.find({ categoryID }).skip(skipCount).limit(limitCount);
     let pool = await connection.connect();
     let category = await Promise.all(
       products.map(async stuff => {
