@@ -127,7 +127,7 @@ exports.getProductByCategory = async (req, res) => {
     console.log("skipCount", skipCount);
     console.log("limitCount", limitCount)
 
-    const products = await db.ProductV2.find({ categoryID }).skip(skipCount).limit(limitCount);
+    const products = await db.ProductV2.find({ categoryID }).limit(limitCount);
 
     console.log("products", products);
 
