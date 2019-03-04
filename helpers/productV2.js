@@ -124,6 +124,8 @@ exports.getProductByCategory = async (req, res) => {
     let skipCount = parseInt(req.query.skipCount);
     let limitCount = parseInt(req.query.limitCount);
 
+    let productCount = await db.ProductV2.find({ categoryID }).count();
+
     const products = await db.ProductV2.find({ categoryID }).skip(skipCount).limit(limitCount);
 
     let pool = await connection.connect();
@@ -152,7 +154,7 @@ exports.getProductByCategory = async (req, res) => {
       item.map(async stuff => await reusable(stuff))
     );
 
-    res.status(200).json({ status: 200, productCount: category.length, Countdata: category });
+    res.status(200).json({ status: 200, count: productCount, data: category });
     pool.close();
   } catch (err) {
     console.log(err);
