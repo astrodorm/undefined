@@ -125,6 +125,9 @@ exports.getProductByCategory = async (req, res) => {
     let limitCount = parseInt(req.query.limitCount);
 
     const products = await db.ProductV2.find({ categoryID }).skip(skipCount).limit(limitCount);
+
+    console.log("products", products);
+
     let pool = await connection.connect();
     let category = await Promise.all(
       products.map(async stuff => {
@@ -132,7 +135,7 @@ exports.getProductByCategory = async (req, res) => {
           .request()
           .query(
             `select ITEMCODE, DESCRIPTION, QTY, SELLINGPRICE from STOCKTABLE where QTY > 2 AND ITEMCODE = '${
-              stuff.itemCode
+            stuff.itemCode
             }'`
           );
         return r.recordset[0];
