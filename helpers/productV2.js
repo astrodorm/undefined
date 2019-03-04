@@ -121,7 +121,16 @@ exports.getProductByItemCode = async (req, res) => {
 exports.getProductByCategory = async (req, res) => {
   try {
     let categoryID = req.params.categoryID;
-    const products = await db.ProductV2.find({ categoryID });
+    let skipCount = parseInt(req.query.skipCount);
+    let limitCount = parseInt(req.query.limitCount);
+
+    console.log("skipCount", skipCount);
+    console.log("limitCount", limitCount)
+
+    const products = await db.ProductV2.find({ categoryID })
+
+    console.log("products", products);
+
     let pool = await connection.connect();
     let category = await Promise.all(
       products.map(async stuff => {
@@ -129,7 +138,7 @@ exports.getProductByCategory = async (req, res) => {
           .request()
           .query(
             `select ITEMCODE, DESCRIPTION, QTY, SELLINGPRICE from STOCKTABLE where QTY > 2 AND ITEMCODE = '${
-              stuff.itemCode
+            stuff.itemCode
             }'`
           );
         return r.recordset[0];
