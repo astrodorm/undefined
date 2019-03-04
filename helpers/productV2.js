@@ -152,7 +152,7 @@ exports.getProductByCategory = async (req, res) => {
       item.map(async stuff => await reusable(stuff))
     );
 
-    res.status(200).json({ status: 200, data: category });
+    res.status(200).json({ status: 200, productCount: category.length, Countdata: category });
     pool.close();
   } catch (err) {
     console.log(err);
